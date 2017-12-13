@@ -363,8 +363,6 @@ function _endTurn() {
 }
 
 function _gameOver() {
-    //game over massage
-    //setTimeout('', 10000);
     if (typeGame == "single") {
         if (TURN == "white") setTimeout('displayMessage("YOU LOSE")', 1000);
         else setTimeout('displayMessage("YOU WIN")', 1000);
@@ -374,12 +372,14 @@ function _gameOver() {
         else setTimeout('displayMessage("WHITE WIN")', 1000);
     }
     else if (typeGame == "online") {
-        if (socket) {
+        if (socketState == "error") {
             setTimeout('displayMessage("CONNECTION CLOSED", 45)', 1000);
             TURN = "black";
+            return;
         }
         else if (TURN == "white") setTimeout('displayMessage("YOU LOSE")', 1000);
         else setTimeout('displayMessage("YOU WIN")', 1000);
+        socketState = "finish";
         socket.close();
     }
 }
@@ -475,7 +475,7 @@ function open_socket() {
             if (data[0] == "msg") {
                 if (data[1] == "wait") {
                     socketState =  "wait";
-                    setTimeout('displayMessage("WAIT FOR ENOTHER PLAYER", 48)', 200);
+                    setTimeout('displayMessage("WAIT FOR ENOTHER PLAYER", 48)', 500);
                 }
                 else if (data[1] == "run") {
                     if (data[2] == "black") TURN = "black";
@@ -497,6 +497,9 @@ function open_socket() {
     // Обработчик закрытия соединения
     socket.onclose = function() {        
         console.log("socket closed");
-        _gameOver();
+        if (socketState == "run") {
+            socketState = "error";
+            _gameOver();
+        }
     }
 }
