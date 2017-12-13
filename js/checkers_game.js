@@ -286,7 +286,7 @@ function playerTurn(x, y) {
                 field[x][y] = field[activeX][activeY];
                 field[activeX][activeY] = {};
                 if (typeGame == "online") socket.send("turn&" + activeX + "&" + activeY + "&" + x + "&" + y);
-                console.log(activeX + "&" + activeY + "&" + x + "&" + y);
+                //console.log(activeX + "&" + activeY + "&" + x + "&" + y);
                 //shift to king if possible
                 if ((y == 0 && field[x][y].color == "white") ||
                     (y == 7 && field[x][y].color == "black")) field[x][y].king = true;
@@ -377,6 +377,11 @@ function _gameOver() {
             TURN = "black";
             return;
         }
+        else if (socketState == "noconnection") {
+            setTimeout('displayMessage("NO CONNECTION TO THE SERVER", 40)', 1000);
+            TURN = "black";
+            return;
+        }
         else if (TURN == "white") setTimeout('displayMessage("YOU LOSE")', 1000);
         else setTimeout('displayMessage("YOU WIN")', 1000);
         socketState = "finish";
@@ -461,6 +466,12 @@ function open_socket() {
     // Создаем соединение с сокетом
     socket = new WebSocket('ws://127.0.0.1:8888');
     
+    socket.onerror = function(error) {
+        console.warn("connection error. ");
+        socketState = "noconnection";
+        _gameOver();
+    }
+
     // Обработчик соединения
     socket.onopen = function() {
         console.log("socket opend");
@@ -478,7 +489,10 @@ function open_socket() {
                     setTimeout('displayMessage("WAIT FOR ENOTHER PLAYER", 48)', 500);
                 }
                 else if (data[1] == "run") {
-                    if (data[2] == "black") TURN = "black";
+                    if (data[2] == "black") {
+                        _endTurn();
+
+                    }
                     socketState = "run";
                     drawField();
                 }

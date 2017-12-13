@@ -27,14 +27,14 @@ while (true) {
 	if (in_array($socket, $read)) {
 		//принимаем новое соединение и производим рукопожатие: 
 		if (($connect = stream_socket_accept($socket, -1)) && $info[(int)$connect] = handshake($connect)) {
-			$info[$game]['game'] = ceil($game/2);
-			$info[$game]['type'] = $game % 2;
-			$connects[$game] = $connect;
+			$info[(int)$connect]['game'] = ceil($game/2);
+			$info[(int)$connect]['type'] = $game % 2;
+			$connects[(int)$connect] = $connect;
 							
 			echo "new connection...\n";   
 			echo "connect=" . $connect . " OK\n";    
 
-			onOpen($connect, $info[$game], $connects);	//вызываем пользовательский сценарий
+			onOpen($connect, $info[(int)$connect], $connects);	//вызываем пользовательский сценарий
 
 			$game++;
 		} 
