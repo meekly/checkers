@@ -1,0 +1,38 @@
+# Склонировать репозиторий себе
+git clone https://github.com/meekly/project1.git
+
+# Посмотреть список веток
+git branch
+
+# Создать свою ветку
+git branch my_new_branch
+
+# Переключиться на другую ветку
+git checkout another_branch_name
+
+# Добавить все изменённые файлы для следующего коммита
+git add -A
+
+# Закоммитить
+git commit -m "Сообщение по коммиту"
+
+# Закоммитить, потом ввести сообщение в открывшемся текстовом редакторе
+git commit
+
+# Забрать все изменения с репозитория
+git pull
+
+# Откатить все изменения к предыдущему коммиту
+git reset —hard HEAD
+
+# Отправить в главный репозиторий
+git push origin branch_name
+
+# Удалить ветку
+git branch -d branch_name
+
+# Слить ветки
+git merge branch_name
+
+# Дополнить последний коммит
+git commit --amend

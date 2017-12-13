@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: flex; /* Гибкое позиционирование страницы */
+    flex-direction: column; /* Отображение элементов в столбец*/
+    height: 100%; /* Высота страницы */
+    width: 100%; /* Ширина страницы */    
+    font-family: 'Open Sans', sans-serif; /* Шрифт текста */    
+    color: #1f1f1f; /* Цвет текста */
+    background-color: #f0f0f0; /* Цвет фона всей страницы */
+}
+
+/*HEADER*/
+header {
+    padding: 0.8%; /* Поля вокруг заголовка */
+    margin-bottom: 32px;
+    background-color: #33363c; /* Цвет фона заголовка */
+}
+header > a {
+    color: #fff; /* Цвет теста заголовка */
+    text-decoration: none; /* Подчеркивание убираем */
+    font-size: 30px; /* Размер текста заголовка */    
+}
+header img {
+	position: relative;
+    top: 3px;
+    left: 2px;
+	width: 27px;
+	filter: invert(100%);
+}
+header > span {
+    position: relative;
+    color: #fff;
+    cursor: pointer;
+    padding: 1%;
+    border-radius: 6px;
+    bottom: 4px; 
+}
+header > span:hover {    
+    background-color: #26282d;
+}
+header .selected_game {
+    background-color: #2f9bc1;
+}
+header .selected_game:hover {
+    background-color: #2a8cae;
+}
+
+/*login-button*/
+header button {
+    position: absolute;
+    right: 16px;
+}
+
+/*LOGIN*/
+#login #form_login input[type='submit'] {
+    width: 64px;
+    margin-right: 62px;
+}
+#login button {
+    position: relative;
+    right: 8px;
+    width: 128px;
+}
+
+/*CONTENT*/
+#content {
+    flex: 1 0 auto;
+    padding: 32px; /* Поля вокруг содержимого */
+    margin: auto;    
+}
+
+/*FOOTER*/
+footer {
+    flex: 0 0 auto;
+    padding: 24px; /* Поля вокруг футера */
+    text-align: center;
+}
+
+/*buttons*/
+.button {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 4px;
+    outline: none;
+    border: 0;
+    font-weight: bold;
+    color: #fff;
+}
+.button-green {
+    background-color: #77af12;
+}
+.button-green:hover {
+    background-color: #679710;
+}
+.button-blue {
+    background-color: #2f9bc1;
+}
+.button-blue:hover {
+    background-color: #2a8cae;
+}
+
+/*form-wrapper*/
+.form-wrapper {
+    text-align: center;
+    padding: 64px;
+    padding-left: 192px;
+    padding-right: 192px;    
+    background-color: #fff;
+}
+.form-wrapper > label {
+    font-size: 22px;
+}
+.form-wrapper form {
+    margin: 16px;
+}
+.form-wrapper .input-text {
+    margin: 8px;
+    padding: 6px;
+    width: 252px;
+}
+.form-wrapper input[type='submit'] {
+    margin: 8px;
+}
+.form-wrapper .error {
+    width: 244px;
+    margin-left: 8px;
+    margin-top: 4px;
+    padding: 4px;
+    font-size: 14px;
+    border-radius: 2px;
+    background-color: #f2ab99;
+    border-color: #F08080;
+}
+.form-wrapper .msg {
+    background-color: #ADFF2F;    
+}
+
+/*game*/
+#game {
+    display: block;
+    margin-top: -44px;
+    margin-bottom: -34px;
+    text-align: center;
+}
