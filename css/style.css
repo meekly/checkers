@@ -145,3 +145,31 @@ footer {
     margin-bottom: -34px;
     text-align: center;
 }
+
+#users-list {
+    position: fixed;
+    right: 10px;
+    bottom: 20px;
+    width: 25%;
+    max-height: 60%;
+    min-height: 10%;
+    overflow-y: auto;
+    background-color: white;
+    box-shadow: 0 0 10px 1px #ddd;
+}
+
+.users-list__user {
+    width: 98%;
+    margin: 0 auto;
+    font-family: Courier New, Courier, Lucida Sans, monospace;
+    text-align: center;
+}
+
+.users-list__user__login {
+    color: green;
+    font-weight: bold;
+    margin: 0 10px 0 10px;
+    padding: 0 10px 0 10px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}

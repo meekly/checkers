@@ -6,3 +6,4 @@
 
     require_once 'core/route.php';
     route(); // запускаем маршрутизатор
+?>

@@ -3,21 +3,23 @@
 class Model {
 	private $mysqli;
 
-    function __construct() {
+	function __construct() {
 		// Подключаемся к базе дынных
-        $this->mysqli = new mysqli("localhost", "root", "", "forum");
-        if ($this->mysqli->connect_error) return false;
-        else {
-            return true;
-        }
-    }
-    function __destruct() {
-        $this->mysqli->close();
+		$this->mysqli = new mysqli("localhost", "root", "", "forum");
+		if ($this->mysqli->connect_error) return false;
+		else {
+			return true;
+		}
 	}
-		
+	function __destruct() {
+		$this->mysqli->close();
+	}
+
 	function is_user($login, $password = null) {		
+		// TODO $login - обработать на наличие инъекций
+		// Можно делать поиск сразу на соответствие логина и хеша пароля
 		$row = $this->mysqli->query("SELECT * FROM users WHERE login = '{$login}'")->fetch_row();		
-		
+
 		// Если не нашли пользователя с таким же именем, можно регестрировать
 		if (!empty($row) && !$password) return true;
 		else if (!$password) return false;
@@ -26,7 +28,7 @@ class Model {
 			if ($row[2] == md5($password)) return true;
 			else return false;
 		}
-    }
+	}
 	function signup() {
 		$hash = md5($_POST['password']);
 		return $this->mysqli->query("INSERT INTO users (login, password, name) VALUES ('{$_POST["login"]}', '{$hash}', '{$_POST["personalname"]}')");		

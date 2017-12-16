@@ -18,7 +18,7 @@
                 Log in
 		<?php else: ?>
             <button id="login-button" class="button button-green" onclick="location.href = '/logout'">
-                My page            
+                Log out            
         <?php endif ?>
         </button>
         <span id="new_single">vs computer</span>

@@ -1,5 +1,10 @@
 <?php
 
+// Константы для определения типа сокета
+define("GAMING", 1);
+define("USER_LIST", 2);
+define("CHATTING", 3);
+
 error_reporting(E_ALL);		//Выводим все ошибки и предупреждения 
 set_time_limit(0); 			//Время выполнения скрипта ограничено 180 секундами 
 ob_implicit_flush();		//Включаем вывод без буферизации   
@@ -8,7 +13,7 @@ $socket = stream_socket_server("tcp://127.0.0.1:8888", $errno, $error);
 
 if (!$socket) die($error."&".$errno);
 
-$connects = array();
+$connects = array(); // All games
 $game     = 1;
 $info     = [];
 
@@ -27,8 +32,8 @@ while (true) {
 	if (in_array($socket, $read)) {
 		//принимаем новое соединение и производим рукопожатие: 
 		if (($connect = stream_socket_accept($socket, -1)) && $info[(int)$connect] = handshake($connect)) {
-			$info[(int)$connect]['game'] = ceil($game/2);
-			$info[(int)$connect]['type'] = $game % 2;
+			$info[(int)$connect]['game'] = ceil($game/2); // Game number
+			$info[(int)$connect]['type'] = $game % 2;     // Socket type
 			$connects[(int)$connect] = $connect;
 							
 			echo "new connection...\n";   
@@ -67,6 +72,30 @@ while (true) {
 	}
 }
 fclose($socket);
+
+
+function onOpen($connect, $info, $connects) { 
+	echo "open OK\n";
+	//если первый игрок, он ожидает второго
+	if ($info['type'] == 1) 
+		fwrite($connect, encode('msg&wait&'.$info['game'])); 
+	else {
+		//если второй, игра начинается
+		fwrite($connect, encode('msg&run&black&'.$info['game']));
+		fwrite($connects[array_search($connect, $connects) - 1], encode('msg&run&white'));
+	}
+} 
+
+function onMessage($connect, $data) { 
+	echo "Message: $data \n";
+	fwrite($connect, encode($data)); 
+}
+
+
+/**
+ * Функции, необходимые для установки соединения, кодирования данных и
+ * декодирования входящих данных.
+ */
 
 //Функция рукопожатия
 function handshake($connect) { 
@@ -269,21 +298,4 @@ function decode($data) {
 	} 
 	
 	return $decodedData; 
-}
-
-function onOpen($connect, $info, $connects) { 
-	echo "open OK\n";
-	//если первый игрок, он ожидает второго
-	if ($info['type'] == 1) 
-		fwrite($connect, encode('msg&wait&'.$info['game'])); 
-	else {
-		//если второй, игра начинается
-		fwrite($connect, encode('msg&run&black&'.$info['game']));
-		fwrite($connects[array_search($connect, $connects) -1], encode('msg&run&white'));
-	}
-} 
-
-function onMessage($connect, $data) { 
-	echo "Message: $data \n";
-	fwrite($connect, encode($data)); 
 }
