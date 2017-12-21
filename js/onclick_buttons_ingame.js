@@ -1,32 +1,33 @@
-/** INIT FIRST GAME */
-if (document.getElementById("new_online").className)
+// Если кнопка активна, то переинициализируем игру
+if (document.getElementById("online").className) {
     _reInitGame("online");
-else if (document.getElementById("new_multi").className) 
+} else if (document.getElementById("multi").className) {
     _reInitGame("multi");
-else if (!document.getElementById("new_single").className) {
-    document.getElementById("new_single").className = "selected_game";
+} else if (!document.getElementById("single").className) {
+    document.getElementById("single").className = "selected_game";
     _reInitGame("single");
 }
 
-/** START NEW GAME BUTTONS */
-document.getElementById("new_single").onclick = function() {
+// Нажимаем на кнопки
+document.getElementById("single").onclick = function() {
     clearClassButtons();
     this.className = "selected_game";
     _reInitGame("single");
 }
-document.getElementById("new_multi").onclick = function() {
+document.getElementById("multi").onclick = function() {
     clearClassButtons();
     this.className = "selected_game";
     _reInitGame("multi");
 }
-document.getElementById("new_online").onclick = function() {
+document.getElementById("online").onclick = function() {
     clearClassButtons();
     this.className = "selected_game";
     _reInitGame("online");
 }
 
 function clearClassButtons() {
-    document.getElementById("new_online").className = "";
-    document.getElementById("new_multi").className = "";
-    document.getElementById("new_single").className = "";
+    // Остальные кнопки остаются ненажатыми
+    document.getElementById("online").className = "";
+    document.getElementById("multi").className = "";
+    document.getElementById("single").className = "";
 }

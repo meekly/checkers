@@ -3,13 +3,17 @@
     padding: 0;
 }
 body {
-    display: flex; /* Гибкое позиционирование страницы */
-    flex-direction: column; /* Отображение элементов в столбец*/
-    height: 100%; /* Высота страницы */
-    width: 100%; /* Ширина страницы */    
+    
     font-family: 'Open Sans', sans-serif; /* Шрифт текста */    
     color: #1f1f1f; /* Цвет текста */
     background-color: #f0f0f0; /* Цвет фона всей страницы */
+}
+
+.main {
+/*    display: flex; /* Гибкое позиционирование страницы */
+/*   flex-direction: column; /* Отображение элементов в столбец*/
+    height: 100%; /* Высота страницы */
+    width: 100%; /* Ширина страницы */    
 }
 
 /*HEADER*/
@@ -24,19 +28,20 @@ header > a {
     font-size: 30px; /* Размер текста заголовка */    
 }
 header img {
-	position: relative;
+    position: relative;
     top: 3px;
     left: 2px;
-	width: 27px;
-	filter: invert(100%);
+    width: 27px;
+    filter: invert(100%);
 }
 header > span {
-    position: relative;
+     position: relative; 
     color: #fff;
     cursor: pointer;
     padding: 1%;
     border-radius: 6px;
-    bottom: 4px; 
+    margin: 10px;
+     bottom: 4px;  
 }
 header > span:hover {    
     background-color: #26282d;
