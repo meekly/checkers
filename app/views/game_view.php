@@ -13,6 +13,9 @@
   <div class="users-list__user">
     <span class="users-list__user__name">Freddy</span>
     <span class="users-list__user__login">fred56</span>
-    <i>online</i>
+    <i>Скучает</i>
+  </div>
+  <div class="users-list__label">
+    Users online
   </div>
 </div>

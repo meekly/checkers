@@ -157,24 +157,37 @@ footer {
     bottom: 20px;
     width: 25%;
     max-height: 60%;
-    min-height: 10%;
+    min-height: 5%;
     overflow-y: auto;
-    background-color: white;
+    background-color: #33263c;
+    color: white;
     box-shadow: 0 0 10px 1px #ddd;
 }
 
 .users-list__user {
-    width: 98%;
     margin: 0 auto;
-    font-family: Courier New, Courier, Lucida Sans, monospace;
+    font-family: Lucida Sans, monospace;
     text-align: center;
+    padding: 3px 0 3px 0;
+}
+
+.users-list__user:hover {
+    background-color: #65374d;
+    cursor: pointer;
 }
 
 .users-list__user__login {
-    color: green;
+    color: #2f9bc1;
     font-weight: bold;
     margin: 0 10px 0 10px;
     padding: 0 10px 0 10px;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
+}
+
+.users-list__label {
+    text-align: center;
+    border-top: 2px solid #44373e;
+    color: #177;
+    padding: 3px 0 3px 0;
 }
