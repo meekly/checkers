@@ -2,16 +2,16 @@
 
 class View {
 	function game_view() {		
-		$this->_generate('game_view.php', array('checkers_game.js', 'onclick_buttons_ingame.js'));
+		$this->_generate('game_view.php', array('checkers_game.js', 'events.js', 'socket.js', 'main.js'));
 	}
 	function msg_view($msg) {
-		$this->_generate('msg_view.php', array('onclick_buttons_outgame.js'), $msg);
+		$this->_generate('msg_view.php', array('events.js'), $msg);
 	}
 	function login_view($msg = null) {
-		$this->_generate('login_view.php', array('forms_validator.js', 'onclick_buttons_outgame.js'), $msg);
+		$this->_generate('login_view.php', array('forms_validator.js', 'events.js', 'socket.js', 'main.js'), $msg);
 	}
 	function signup_view($msg = null) {
-		$this->_generate('signup_view.php', array('forms_validator.js', 'onclick_buttons_outgame.js'), $msg);
+		$this->_generate('signup_view.php', array('forms_validator.js', 'events.js', 'socket.js', 'main.js'), $msg);
 	}
 	function mypage_view($msg = null) {
 		$this->game_view();
