@@ -13,8 +13,6 @@ function CheckerField(color){
 }
 
 
-
-
 /** INIT GAME */
 function Checkers() {
     var self = this;

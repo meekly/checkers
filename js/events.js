@@ -34,9 +34,9 @@ function bindEvents() {
     }
 
         /** CLEAR CLASS BUTTONS */
-    document.getElementById("new_online").className = "";
-    document.getElementById("new_multi").className = "";
-    document.getElementById("new_single").className = "";
+    //document.getElementById("new_online").className = "";
+    //document.getElementById("new_multi").className = "";
+    //document.getElementById("new_single").className = "";
     
     /** START NEW GAME BUTTONS */
     document.getElementById("new_single").onclick = function() {
