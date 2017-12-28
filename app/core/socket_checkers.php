@@ -1,9 +1,5 @@
 <?php
-
-// Константы для определения типа сокета
-define("GAMING", 1);
-define("USER_LIST", 2);
-define("CHATTING", 3);
+require 'model.php';
 
 error_reporting(E_ALL);		//Выводим все ошибки и предупреждения 
 set_time_limit(0); 			//Время выполнения скрипта ограничено 180 секундами 
@@ -11,11 +7,11 @@ ob_implicit_flush();		//Включаем вывод без буферизаци�
 
 $socket = stream_socket_server("tcp://127.0.0.1:8888", $errno, $error); 
 
-if (!$socket) die($error."&".$errno);
+if (!$socket) die("$error $errno");
 
 $connects = array(); // All games
-$game     = 1;
 $info     = [];
+$model    = new Model();
 
 while (true) {
 	//формируем массив прослушиваемых сокетов: 
@@ -30,18 +26,26 @@ while (true) {
 	
 	//есть новое соединение 
 	if (in_array($socket, $read)) {
+
 		//принимаем новое соединение и производим рукопожатие: 
-		if (($connect = stream_socket_accept($socket, -1)) && $info[(int)$connect] = handshake($connect)) {
-			$info[(int)$connect]['game'] = ceil($game/2); // Game number
-			$info[(int)$connect]['type'] = $game % 2;     // Socket type
+		if (($connect = stream_socket_accept($socket, -1)) && $info[(int)$connect] = handshake($connect)) {										
+			echo "new connection=" . $connect . " OK\n";						
+			
+			//отправляем подключившимуся игроку список всех текущих игроков онлайн
+			foreach ($connects as $client) {
+				$data = false;
+				if ($info[(int)$client]['state'] == 'online') {
+					$data = "online&".$info[(int)$client]['user_id']."&".$info[(int)$client]['user_name'];
+				}
+				else if ($info[(int)$client]['state'] == 'busy') {
+					$data = "busy&".$info[(int)$client]['user_id']."&".$info[(int)$client]['user_name'];
+				}
+				if ($data) onMessage($connect, $data);
+			}
+			
+			//добавляем новое подключение
 			$connects[(int)$connect] = $connect;
-							
-			echo "new connection...\n";   
-			echo "connect=" . $connect . " OK\n";    
-
-			onOpen($connect, $info[(int)$connect], $connects);	//вызываем пользовательский сценарий
-
-			$game++;
+			$info[(int)$connect]['state'] = 'connected';
 		} 
 		unset($read[array_search($socket, $read)]);
 	}
@@ -51,40 +55,87 @@ while (true) {
 	//обрабатываем все соединения 
 	foreach($read as $connect) {
 		$data = fread($connect, 100000); 
-		
-		//соединение было закрыто 
-		if (!strlen($data)) {				
-			echo "connection closed...\n";   
-			fclose($connect); 
+
+		//соединение было закрыто
+		if (!strlen($data)) {
+			echo "connection close OK\n";
+			fclose($connect);
 			unset($connects[array_search($connect, $connects)]);
-			if ($game % 2 == 0) $game++;
+			continue;
+		}
+		
+		$comm = explode('&', $data);
+		switch($comm[0]) {
+			case 'connect':
+				$info[(int)$connect]['state'] = 'online';
+				$info[(int)$connect]['user_id'] = $comm[1];
+				$info[(int)$connect]['user_name'] = $comm[2];
+				//отправляем всем, что подключился новый игрок
+				foreach ($connects as $client) {
+					if ($connect != $client) {
+						onMessage($client, "online&".$info[(int)$connect]['user_id']."&".$info[(int)$connect]['user_name']);
+					}
+				}								
+				break;
 
-			echo "close OK\n"; 
-			continue; 
-		} 
+			case 'invite':
+			case 'invite-deny':
+			case 'invite-accept':
+				//пересылаем invite... нужному пользователю
+				foreach ($connects as $client) {
+					if ($info[(int)$client]['user_id'] == $comm[1]) {
+						onMessage($client, $comm[0]."&".$info[(int)$connect]['user_id']);
+						break;
+					}
+				}
+				//если это принятие приглашения, то нужно зафиксировать что началась новая игра
+				if ($comm[0] == 'invite-accept') {
+					//сохраняем информацию о том, что игроки заняты
+					foreach ($connects as $client) {
+						if ($info[(int)$client]['user_id'] == $comm[1]) {							
+							$info[(int)$connect]['state'] = 'busy';
+							$info[(int)$connect]['opponent_id'] = $info[(int)$client]['user_id'];
+							$info[(int)$client]['state'] = 'busy';
+							$info[(int)$client]['opponent_id'] = $info[(int)$connect]['user_id'];
+							break;
+						}
+					}
+					//оповещаем всех что пользователи начавшие игру заняты
+					foreach ($connects as $client) {
+						if ($connect != $client) {
+							onMessage($client, "busy&".$info[(int)$connect]['user_id']."&".$info[(int)$connect]['user_name']);							
+						}
+						if ($info[(int)$connect]['opponent_id'] != $info[(int)$client]['user_id']) {
+							onMessage($client, "busy&".$info[(int)$connect]['opponent_id']);							
+						}
+					}
+				}
+				break;
 
-		//просто пересылаем координаты хода
-		foreach ($connects as $client) {
-			if ($connect != $client && $info[(int)$connect]['game'] == $info[(int)$client]['game']) {
-				onMessage($client, decode($data)['payload']);
-			}
-		}				
+			case 'turn':
+				//пересылаем координаты хода противнику
+				foreach ($connects as $client) {
+					if ($info[(int)$connect]['user_id'] == $info[(int)$client]['oponnent_id']) {
+						onMessage($client, decode($data)['payload']);
+					}
+				}
+				break;
+
+			case 'game-over':
+				//записываем результаты игры в базу
+				//оповещаем что пользователи свободны для игр
+				//обрабатываем если surrender
+				//...
+				break;
+
+			case 'message':
+				//пересылаем сообщение нужному пользователю
+				//...
+				break;			
+		}					
 	}
 }
 fclose($socket);
-
-
-function onOpen($connect, $info, $connects) { 
-	echo "open OK\n";
-	//если первый игрок, он ожидает второго
-	if ($info['type'] == 1) 
-		fwrite($connect, encode('msg&wait&'.$info['game'])); 
-	else {
-		//если второй, игра начинается
-		fwrite($connect, encode('msg&run&black&'.$info['game']));
-		fwrite($connects[array_search($connect, $connects) - 1], encode('msg&run&white'));
-	}
-} 
 
 function onMessage($connect, $data) { 
 	echo "Message: $data \n";

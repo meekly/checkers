@@ -5,9 +5,9 @@ class Model {
 
 	function __construct() {
 		// Подключаемся к базе дынных
-		$this->mysqli = new mysqli("localhost", "root", "", "forum");
+		$this->mysqli = new mysqli("localhost", "root", "", "checkers");
 		if ($this->mysqli->connect_error) return false;
-		else {
+		else {			
 			return true;
 		}
 	}

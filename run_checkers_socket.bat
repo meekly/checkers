@@ -1,0 +1,1 @@
+C:\xampp\php\php.exe -q app\core\socket_checkers.php
