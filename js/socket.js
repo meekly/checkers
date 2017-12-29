@@ -1,6 +1,12 @@
 function openSocket() {
     var socket = new WebSocket('ws://127.0.0.1:8888');
-    
+
+		socket.dispatcherList = {};
+
+		socket.register = function(message, object) {
+				socket.dispatcherList[message] = object;
+		};
+		
     socket.onerror = function(error) {
         console.warn("connection error. ");
         Game.setSocketState("noconnection");
@@ -16,8 +22,14 @@ function openSocket() {
     socket.onmessage = function(e) {
         console.log("server answered: " + e.data);
         try {            
-            var data = e.data.split('&');
-
+            var message = e.data.split('&')[0];
+						if (socket.dispatcherList[message] !== undefined) {
+								socket.dispatcherList[message].dispatch(e.data);
+						} else {
+								console.log("Unable to dispatch message: "+message);
+						}
+						
+						/* Old method
             if (data[0] == "msg") {
                 if (data[1] == "wait") {
                     Game.setSocketState("wait");
@@ -37,12 +49,15 @@ function openSocket() {
                 }
             }
             else if (data[0] == "turn") Game.onlineTurn(data[1], data[2], data[3], data[4]);
+						*/
         }
         catch(exc) {
             console.warn("bad server answer " + exc.name);
         }        
     }
-
+		socket.active = function() {
+				return socket.readyState == 3;
+		}
     // Обработчик закрытия соединения
     socket.onclose = function() {        
         console.log("socket closed");

@@ -33,13 +33,13 @@ header img {
     filter: invert(100%);
 }
 header > span {
-     position: relative; 
+    position: relative; 
     color: #fff;
     cursor: pointer;
     padding: 1%;
     border-radius: 6px;
     margin: 10px;
-     bottom: 4px;  
+    bottom: 4px;  
 }
 header > span:hover {    
     background-color: #26282d;

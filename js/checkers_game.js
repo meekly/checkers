@@ -1,10 +1,10 @@
 /** VARIBLES */
 /*
-var canvas, ctx, 
-    fieldSize, scale = 100, gap = 2, 
-    colorScheme, field, TURN, typeTurn, typeGame,
-    imgKingBlack, imgKingWhite,
-    socket, socketState;
+	var canvas, ctx, 
+  fieldSize, scale = 100, gap = 2, 
+  colorScheme, field, TURN, typeTurn, typeGame,
+  imgKingBlack, imgKingWhite,
+  socket, socketState;
 */
 
 function CheckerField(color){
@@ -48,8 +48,8 @@ function Checkers() {
     this.canvas.addEventListener("click", function(evt) {
         if (self.typeGame != "multi" && self.TURN == "black") return;
         var rect = self.canvas.getBoundingClientRect();
-	    var x = Math.floor(8*(evt.clientX - rect.left) / self.fieldSize),
-		    y = Math.floor(8*(evt.clientY - rect.top) / self.fieldSize);        
+				var x = Math.floor(8*(evt.clientX - rect.left) / self.fieldSize),
+						y = Math.floor(8*(evt.clientY - rect.top) / self.fieldSize);        
         if (self.typeGame != "online" || self.socketState == "run") {
             self.playerTurn(x, y);
         }
@@ -68,6 +68,8 @@ function Checkers() {
     this.scale = 100;
     this.gap = 2;
     this.drawField();
+		Socket.register("turn", this);
+		Socket.register("opponent-surrender", this);
 }
 
 
@@ -107,7 +109,7 @@ Checkers.prototype.drawField = function() {
     for (var i = 0; i < 8; i++) for (var j = 0; j < 8; j++) {
         //draw rects
         this.ctx.fillStyle = (i + j) % 2 == 0 ? this.colorScheme.light : this.colorScheme.dark;
-		this.ctx.fillRect(i*this.scale+this.gap, j*this.scale+this.gap, this.scale-this.gap*2, this.scale-this.gap*2);
+				this.ctx.fillRect(i*this.scale+this.gap, j*this.scale+this.gap, this.scale-this.gap*2, this.scale-this.gap*2);
         // Draw ckecker
         if ("checker" in this.field[i][j]) { this._circle(i, j, this.field[i][j].color, true); }
         // Draw ready(yellow) indication
@@ -115,8 +117,8 @@ Checkers.prototype.drawField = function() {
         // Draw king Image
         if("king" in this.field[i][j]) { 
             this.ctx.drawImage(this.field[i][j].color == "white" 
-                ? this.imgKingBlack 
-                : this.imgKingWhite, i*this.scale+this.scale/4, j*this.scale+this.scale/4, this.scale/2, this.scale/2);
+															 ? this.imgKingBlack 
+															 : this.imgKingWhite, i*this.scale+this.scale/4, j*this.scale+this.scale/4, this.scale/2, this.scale/2);
         }
     }
 }
@@ -147,17 +149,17 @@ Checkers.prototype.analyzeField = function() {
             if ("king" in this.field[i][j]) {
                 if (this._isCanAttackKing(i, j)) canBit = true;
             }
-            else if (this._isCanAttack(i, j)) canBit = true;    
+    else if (this._isCanAttack(i, j)) canBit = true;    
     if (canBit) return "attack";
 
     var canMove = false
     if (!canBit) for (var i = 0; i < 8; i++) for (var j = 0; j < 8; j++)
         if ("checker" in this.field[i][j] 
-                && this.field[i][j].color == this.TURN)
+            && this.field[i][j].color == this.TURN)
             if ("king" in this.field[i][j]) { 
                 if (this._isCanMoveKing(i, j)) canMove = true;
             }
-            else if (this._isCanMove(i, j)) canMove = true;
+    else if (this._isCanMove(i, j)) canMove = true;
 
     if (canMove) { return "move"; } else {
         return "game over";
@@ -168,35 +170,35 @@ Checkers.prototype._isCanAttack = function(x, y) {
     this.field[x][y].moveTo = [];
     var enemyColor = (this.TURN == "black") ? "white" : "black";
     //left up
-     if (x-2 >= 0 && y-2 >= 0 
-            && "checker" in this.field[x-1][y-1] 
-            && this.field[x-1][y-1].color == enemyColor 
-            && !("checker" in this.field[x-2][y-2]))
+    if (x-2 >= 0 && y-2 >= 0 
+        && "checker" in this.field[x-1][y-1] 
+        && this.field[x-1][y-1].color == enemyColor 
+        && !("checker" in this.field[x-2][y-2]))
         this.field[x][y].moveTo.push([x-2, y-2]);         
     //right up
-     if (x+2 < 8 
-            && y-2 >= 0 
-            && "checker" in this.field[x+1][y-1] 
-            && this.field[x+1][y-1].color == enemyColor 
-            && !("checker" in this.field[x+2][y-2]))
+    if (x+2 < 8 
+        && y-2 >= 0 
+        && "checker" in this.field[x+1][y-1] 
+        && this.field[x+1][y-1].color == enemyColor 
+        && !("checker" in this.field[x+2][y-2]))
         this.field[x][y].moveTo.push([x+2, y-2]);
     //left down
-     if (x-2 >= 0 
-            && y+2 < 8 
-            && "checker" in this.field[x-1][y+1] 
-            && this.field[x-1][y+1].color == enemyColor 
-            && !("checker" in this.field[x-2][y+2]))
+    if (x-2 >= 0 
+        && y+2 < 8 
+        && "checker" in this.field[x-1][y+1] 
+        && this.field[x-1][y+1].color == enemyColor 
+        && !("checker" in this.field[x-2][y+2]))
         this.field[x][y].moveTo.push([x-2, y+2]);  
     //right down
-     if (x+2 < 8 
-            && y+2 < 8 && "checker" in this.field[x+1][y+1] 
-            && this.field[x+1][y+1].color == enemyColor 
-            && !("checker" in this.field[x+2][y+2]))
+    if (x+2 < 8 
+        && y+2 < 8 && "checker" in this.field[x+1][y+1] 
+        && this.field[x+1][y+1].color == enemyColor 
+        && !("checker" in this.field[x+2][y+2]))
         this.field[x][y].moveTo.push([x+2, y+2]);                      
     
     if (this.field[x][y].moveTo.length == 0) {
-            delete this.field[x][y].moveTo;
-            return false;
+        delete this.field[x][y].moveTo;
+        return false;
     } else {
         return true;
     }
@@ -221,8 +223,8 @@ Checkers.prototype._isCanMove = function(x, y) {
             this.field[x][y].moveTo.push([x+1, y+1]);    
     }
     if (this.field[x][y].moveTo.length == 0) {
-            delete this.field[x][y].moveTo;
-            return false;
+        delete this.field[x][y].moveTo;
+        return false;
     } else { return true; }
 }
 
@@ -409,6 +411,7 @@ Checkers.prototype._endTurn = function() {
 }
 
 Checkers.prototype._gameOver = function() {
+		// Socket send gameover&win/loose
     if (this.typeGame == "single") {
         if (this.TURN == "white") setTimeout(this.displayMessage.bind(this,"YOU LOSE"), 1000);
         else setTimeout(this.displayMessage.bind(this, "YOU WIN"), 1000);
@@ -445,14 +448,14 @@ Checkers.prototype.computerTurn = function() {
     for (var x = 0; x < 8; x++) for (var y = 0; y < 8; y++) {
         if ("moveTo" in this.field[x][y] && ++count >= randActiveChecker) {
             var randTurn = Math.floor(this.field[x][y].moveTo.length * Math.random())
-                _x = this.field[x][y].moveTo[randTurn][0],
-                _y = this.field[x][y].moveTo[randTurn][1];
+            _x = this.field[x][y].moveTo[randTurn][0],
+            _y = this.field[x][y].moveTo[randTurn][1];
             //move checker
             this.field[_x][_y] = this.field[x][y];
             this.field[x][y]  = {};
             //shift to king if possible
             if ((_y == 0 && this.field[_x][_y].color == "white") ||
-            (_y == 7 && this.field[_x][_y].color == "black")) this.field[_x][_y].king = true;
+								(_y == 7 && this.field[_x][_y].color == "black")) this.field[_x][_y].king = true;
             //make attack
             if (this.typeTurn == "attack") {
                 this.activeX = x;
@@ -483,7 +486,7 @@ Checkers.prototype.onlineTurn = function(fromX, fromY, toX, toY) {
     this.field[fromX][fromY] = {};
     //shift to king if possible
     if ((toY == 0 && this.field[toX][toY].color == "white") ||
-    (toY == 7 && this.field[toX][toY].color == "black")) this.field[toX][toY].king = true;
+				(toY == 7 && this.field[toX][toY].color == "black")) this.field[toX][toY].king = true;
     //make attack
     if (typeTurn == "attack") {
         this.activeX = fromX;
@@ -515,5 +518,14 @@ Checkers.prototype.setSocketState = function(state) {
     this.socketState = state;
 }
 
-// Starting a game
-//var Game = new Checkers();
+Checkers.prototype.dispatch = function(message) {
+		var tokens = message.split('&');
+		switch (tokens[0]) {
+		case 'turn':
+				this.onlineTurn(tokens[1], tokens[2], tokens[3], tokens[4]);
+				break;
+		case 'opponent-surrender':
+				this._gameOver();
+				break;
+		}
+}

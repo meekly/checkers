@@ -1,8 +1,10 @@
-var Game, Socket;
+var Game, Socket, Darwin, chat;
 document.addEventListener("DOMContentLoaded", function(){
-	Socket = openSocket();
-	Game = new Checkers();
-	bindEvents();
-	// Инициализация классов, ответственных за отображение пользователей
-	// Ошибок быть не должно. Просто окошко: игра возможна только в режиме Оффлайн
+		Socket = openSocket(); // Глобальный объект для отправки сообщений Socket.send()
+		Game = new Checkers(); // Игра и всё, что связано с нейx
+		Darwin = new Communicator('ian', 1); // Отвечает за вывод приглашений, показ страничек, связывает клиент и сервер
+		chat = new Chat();
+		
+
+		bindEvents(); // Обработчики нажатий на кнопки
 });
