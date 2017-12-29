@@ -31,7 +31,11 @@ class Model {
 	}
 	function signup() {
 		$hash = md5($_POST['password']);
-		return $this->mysqli->query("INSERT INTO users (login, password, name) VALUES ('{$_POST["login"]}', '{$hash}', '{$_POST["personalname"]}')");		
+		return $this->mysqli->query("INSERT INTO users (login, password, name) VALUES ('{$_POST["login"]}', '{$hash}', '{$_POST["personalname"]}')");
+	}
+
+	function save_game_result($winner_id, $loser_id) {
+		return $this->mysqli->query("INSERT INTO games (player1_id, player2_id) VALUES ('{$winner_id}', '{$loser_id}')");
 	}
 
 	// метод выборки данных
