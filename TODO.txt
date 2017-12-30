@@ -58,7 +58,7 @@
   - message - принимаем сообщение от пользователя, с котором идет текущая игра
     {"type":"message", "text": //...}
   - message-all - узнаем о сообщении в общем чате от пользователя user_id
-    {"type":"message-all", "text": //..., "user_id": //...}
+    {"type":"message-all", "text": //..., "user_id": //..., "user_name": //...}
   - message-history - узнаем историю сообщений в чате при подключении, size - число сообщений
     {"type":"message-history", "size": //..., "messages": [{"text": //..., "user_id": //..., "user_name": //...}]}
 

@@ -1,1 +1,1 @@
-C:\xampp\php\php.exe -q app\core\socket.php
+C:\xampp\php\php.exe -q app\socket\socket.php

@@ -1,6 +1,7 @@
 <?php
 
 require 'model.php';
+require 'chat_buffer.php';
 
 error_reporting(E_ALL);		//Выводим все ошибки и предупреждения 
 set_time_limit(0); 			//Время выполнения скрипта ограничено 180 секундами 
@@ -12,6 +13,7 @@ if (!$socket) die("$error $errno");
 
 $connects = array();
 $info     = [];
+$chat     = new ChatBuffer(20);
 
 while (true) {
 	//формируем массив прослушиваемых сокетов:
@@ -20,11 +22,9 @@ while (true) {
 	$write = $except = null;
 	
 	//ожидаем сокеты доступные для чтения (без таймаута)
-	if (!stream_select($read, $write, $except, null)) {
-		break;
-	}
+	if (!stream_select($read, $write, $except, null)) break;
 	
-	//есть новое соединение
+	//обрабатываем новое соединение
 	if (in_array($socket, $read)) {
 		//принимаем новое соединение и производим рукопожатие:
 		if (($connect = stream_socket_accept($socket, -1)) && $info[(int)$connect] = handshake($connect)) {
@@ -42,7 +42,10 @@ while (true) {
 			}
 
 			//отправляем подключившимуся игроку историю чата
-			//...
+			onMessage($connect, array(
+				'type' => 'message-history',
+				'size' => 20,
+				'messages' => $chat->get(20)));
 			
 			//добавляем новое подключение
 			$connects[(int)$connect] = $connect;
@@ -57,7 +60,7 @@ while (true) {
 	foreach($read as $connect) {
 		$data = fread($connect, 100000);
 		
-		//соединение было закрыто
+		//обрабатываем закрытие соеденения
 		if (!strlen($data)) {
 			echo "connection close OK\n";
 			fclose($connect);
@@ -66,7 +69,7 @@ while (true) {
 		}
 		
 		$data = json_decode(decode($data)['payload']);
-
+		//выполняем действия в соответствии с типом полученного сообщения
 		switch($data['type']) {
 			case 'connect':
 				$info[(int)$connect]['state'] = 'online';
@@ -87,7 +90,7 @@ while (true) {
 			case 'invite':
 			case 'invite-deny':
 			case 'invite-accept':
-				//пересылаем invite... нужному пользователю				
+				//пересылаем invit-ы нужному пользователю				
 				foreach ($connects as $client) {
 					if ($info[(int)$client]['user_id'] == $data['user_id']) {
 						onMessage($client, array(
@@ -132,6 +135,7 @@ while (true) {
 				foreach ($connects as $client) {
 					if ($info[(int)$connect]['user_id'] == $info[(int)$client]['oponnent_id']) {
 						onMessage($client, $data);
+						break;
 					}
 				}
 				break;
@@ -153,6 +157,7 @@ while (true) {
 							'user_id' => $info[(int)$connect]['opponent_id']));
 					}
 				}
+				//находим информацию о противнике
 				foreach ($connects as $client) {
 					if ($info[(int)$client]['user_id'] == $info[(int)$connect]['opponent_id']) {
 						//записываем результаты игры в базу
@@ -162,7 +167,7 @@ while (true) {
 						if ($data['result'] == 'surrender') {
 							onMessage($client, array(
 								'type' => 'opponent-surrender'));
-						}						
+						}
 						//сохраняем информацию о том, что игроки свободны
 						$info[(int)$connect]['state'] = 'online';
 						$info[(int)$connect]['opponent_id'] = false;
@@ -177,15 +182,19 @@ while (true) {
 				//пересылаем сообщение всем пользователям
 				$msg = array(
 					'type' => 'message-all',
-					'user_id' => $info[(int)$connect]['user_id']
-				);
+					'user_id' => $info[(int)$connect]['user_id'],
+					'user_name' => $info[(int)$connect]['user_name'],
+					'text' => $data['text']);
 				foreach ($connects as $client) {
 					if ($client != $connect) {
-						onMessage($client, $msg);						
+						onMessage($client, $msg);
 					}
 				}
+				//сохраняем  сообщение в буфер чата
+				unset($msg['type']);
+				$chat->add($msg);
 				break;
-		}		
+		}
 	}
 }
 fclose($socket);
