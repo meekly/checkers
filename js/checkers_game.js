@@ -519,10 +519,10 @@ Checkers.prototype.setSocketState = function(state) {
 }
 
 Checkers.prototype.dispatch = function(message) {
-		var tokens = message.split('&');
-		switch (tokens[0]) {
+		var tokens = JSON.parse(message);
+		switch (tokens["type"]) {
 		case 'turn':
-				this.onlineTurn(tokens[1], tokens[2], tokens[3], tokens[4]);
+				this.onlineTurn(tokens["fromX"], tokens["fromY"], tokens["toX"], tokens["toY"]);
 				break;
 		case 'opponent-surrender':
 				this._gameOver();

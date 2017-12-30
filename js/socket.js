@@ -22,11 +22,11 @@ function openSocket() {
     socket.onmessage = function(e) {
         console.log("server answered: " + e.data);
         try {            
-            var message = e.data.split('&')[0];
-						if (socket.dispatcherList[message] !== undefined) {
-								socket.dispatcherList[message].dispatch(e.data);
+            var type = JSON.parse(e.data)["type"];
+						if (socket.dispatcherList[type] !== undefined) {
+								socket.dispatcherList[type].dispatch(e.data);
 						} else {
-								console.log("Unable to dispatch message: "+message);
+								console.log("Unable to dispatch type: "+type);
 						}
 						
 						/* Old method

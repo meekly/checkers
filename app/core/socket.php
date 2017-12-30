@@ -114,13 +114,13 @@ while (true) {
 							onMessage($client, array(
 								'type' => 'change-status',
 								'status' => 'busy',
-								'user_id' => $info[(int)$connect]['user_id']);
+								'user_id' => $info[(int)$connect]['user_id']));
 						}
 						if ($info[(int)$connect]['opponent_id'] != $info[(int)$client]['user_id']) {
 							onMessage($client, array(
 								'type' => 'change-status',
 								'status' => 'busy',
-								'user_id' => $info[(int)$connect]['opponent_id']);
+								'user_id' => $info[(int)$connect]['opponent_id']));
 						}
 					}
 				}
@@ -144,13 +144,13 @@ while (true) {
 						onMessage($client, array(
 							'type' => 'change-status',
 							'status' => 'online',
-							'user_id' => $info[(int)$connect]['user_id']);
+							'user_id' => $info[(int)$connect]['user_id']));
 					}
 					if ($info[(int)$connect]['opponent_id'] != $info[(int)$client]['user_id']) {
 						onMessage($client, array(
 							'type' => 'change-status',
 							'status' => 'online',
-							'user_id' => $info[(int)$connect]['opponent_id']);
+							'user_id' => $info[(int)$connect]['opponent_id']));
 					}
 				}
 				foreach ($connects as $client) {
@@ -161,7 +161,7 @@ while (true) {
 						//если surrender, оповещаем второго игрока, что он выиграл
 						if ($data['result'] == 'surrender') {
 							onMessage($client, array(
-								'type' => 'opponent-surrender');
+								'type' => 'opponent-surrender'));
 						}						
 						//сохраняем информацию о том, что игроки свободны
 						$info[(int)$connect]['state'] = 'online';

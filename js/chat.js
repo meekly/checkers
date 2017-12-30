@@ -3,7 +3,6 @@ function Chat() {
 }
 
 Chat.prototype.dispatch = function(message) {
-		var text = message.split('&')[1];
 		// Add to chat window
-		alert(text); //... yet
+		alert(message); //... yet
 };
