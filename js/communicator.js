@@ -11,14 +11,14 @@ function Communicator(login, userId) {
 
 Communicator.prototype.activate = function(userId, login) {
 		if (Socket.active()) {
-				clearInterval(); 
 				Socket.send("connect&"+userId+"&"+login); // Send socket that I am active
 				Socket.register("invite", this);
 				Socket.register("invite-deny", this);
 				Socket.register("invite-accept", this);
+				Socket.register("change-status", this);
 				Socket.register("busy", this);
 		} else {
-				setTimeout(this.activate.bind(userId, login), 30000);
+				setTimeout(this.activate.bind(this, userId, login), 30000);
 		}
 }
 

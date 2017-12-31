@@ -9,17 +9,17 @@
   <body>
     <div class="main">
       <!--HEADER-->
-      <header>
-	<a href="/"><img src="img/king-black.png"> Cool Checkers</a>
-	
-	<button id="login-button" class="button button-green" onclick="location.href = '/login'">
-	  <?php if ($_SESSION['name'] == 'guest'): ?>
+      <nav>
+				<a href="/"><img src="img/king-black.png"> Cool Checkers</a>
+				
+				<button id="login-button" onclick="location.href = '/login'">
+					<?php if ($_SESSION['name'] == 'guest'): ?>
             Log in
-	  <?php else: ?>
+					<?php else: ?>
             Log out            
           <?php endif ?>
         </button>
-	
+				
         <span id="single">vs computer</span>
         <?php if (!empty($_SESSION['game_type']) && $_SESSION['game_type'] == "offline"): ?>
           <span id="multi" class="selected_game">offline</span>
@@ -27,12 +27,12 @@
           <span id="multi">offline</span>
         <?php endif ?>
 
-	<?php if (!empty($_SESSION['game_type']) && $_SESSION['game_type'] == "online"): ?>
+				<?php if (!empty($_SESSION['game_type']) && $_SESSION['game_type'] == "online"): ?>
           <span id="online" class="selected_game">online</span>
         <?php else: ?>
           <span id="online">online</span>
         <?php endif ?>     
-      </header>
+      </nav>
       
       <div id="content">
         <?php include 'app/views/'.$content_view; ?>

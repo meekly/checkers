@@ -3,10 +3,10 @@
 const CORE_JS = array(
 	'checkers_game.js',
 	'communicator.js',
-	'chat.js',
 	'events.js',
 	'socket.js',
-	'main.js'
+	'chat.js',
+	'main.js',
 );
 
 class View {

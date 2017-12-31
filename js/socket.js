@@ -1,32 +1,34 @@
+var DEBUG = true;
+function debug(message) { if(DEBUG === true) { console.log(message); } }
 function openSocket() {
     var socket = new WebSocket('ws://127.0.0.1:8888');
 
-		socket.dispatcherList = {};
+		socket.dispatcherList = {};	// List of objects (may be in future list of arrays of objects)
 
 		socket.register = function(message, object) {
 				socket.dispatcherList[message] = object;
 		};
 		
     socket.onerror = function(error) {
-        console.warn("connection error. ");
+        debug("connection error. ");
         Game.setSocketState("noconnection");
         Game._gameOver();
     }
 
     // Обработчик соединения
     socket.onopen = function() {
-        console.log("socket opened");
+        debug("socket opened");
     }
 
     // Обработчик получения сообщения от сервера
     socket.onmessage = function(e) {
-        console.log("server answered: " + e.data);
+        debug("server answered: " + e.data);
         try {            
             var type = JSON.parse(e.data)["type"];
 						if (socket.dispatcherList[type] !== undefined) {
 								socket.dispatcherList[type].dispatch(e.data);
 						} else {
-								console.log("Unable to dispatch type: "+type);
+								debug("Unable to dispatch type: "+type);
 						}
 						
 						/* Old method
@@ -52,7 +54,7 @@ function openSocket() {
 						*/
         }
         catch(exc) {
-            console.warn("bad server answer " + exc.name);
+            debug("bad server answer " + exc.name);
         }        
     }
 		socket.active = function() {

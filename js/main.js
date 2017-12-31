@@ -1,9 +1,10 @@
-var Game, Socket, Darwin, chat;
+var Game, Socket, Darwin, chat, globalChat;
 document.addEventListener("DOMContentLoaded", function(){
 		Socket = openSocket(); // Глобальный объект для отправки сообщений Socket.send()
 		Game = new Checkers(); // Игра и всё, что связано с нейx
 		Darwin = new Communicator('ian', 1); // Отвечает за вывод приглашений, показ страничек, связывает клиент и сервер
 		chat = new Chat();
+		globalChar = new GlobalChat();
 		
 
 		bindEvents(); // Обработчики нажатий на кнопки

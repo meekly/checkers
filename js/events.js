@@ -31,12 +31,13 @@ function bindEvents() {
 		//document.getElementById("new_single").className = "";
 		
 		/** START NEW GAME BUTTONS */
+		/*
 		[["single", "/"],
 		 ["multi", "offline"],
 		 ["online", "online"]].forEach(function (item) {
 				 document.getElementById(item[0]).onclick = new Function("location.href = '"+item[1]+"'");
 		 });
-		
+		*/
 		/*
 		document.getElementById("single").onclick = function() {
 				location.href = '/';

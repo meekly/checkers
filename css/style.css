@@ -3,7 +3,6 @@
     padding: 0;
 }
 body {
-    
     font-family: 'Open Sans', sans-serif; /* Шрифт текста */    
     color: #1f1f1f; /* Цвет текста */
     background-color: #f0f0f0; /* Цвет фона всей страницы */
@@ -14,47 +13,66 @@ body {
     width: 100%; /* Ширина страницы */    
 }
 
-/*HEADER*/
-header {
-    padding: 0.8%; /* Поля вокруг заголовка */
+/*NAV*/
+nav {
+		/*    padding: 0.8%; /* Поля вокруг заголовка */
+		display: flex;
+		flex-direction: row;
     margin-bottom: 32px;
-    background-color: #33363c; /* Цвет фона заголовка */
+    background-color: #343434; /* Цвет фона заголовка */
+		height: 40px;
 }
-header > a {
+nav > a {
     color: #fff; /* Цвет теста заголовка */
     text-decoration: none; /* Подчеркивание убираем */
-    font-size: 30px; /* Размер текста заголовка */    
+    font-size: 30px; /* Размер текста заголовка */
+		align-self: center;
+		margin-right: 20px;
 }
-header img {
-    position: relative;
-    top: 3px;
-    left: 2px;
+nav img {
+		margin-left: 20px;
     width: 27px;
     filter: invert(100%);
 }
-header > span {
-    position: relative; 
+nav > span {
+		align-self: center;
     color: #fff;
+		text-align: center;
+		line-height: 40px;
+		padding: 0 10px 0 10px;
+		height: 100%;
     cursor: pointer;
-    padding: 1%;
-    border-radius: 6px;
-    margin: 10px;
     bottom: 4px;  
 }
-header > span:hover {    
+nav > span:hover {    
     background-color: #26282d;
 }
-header .selected_game {
-    background-color: #2f9bc1;
+nav .selected_game {
+    background-color: #8e8b82;
 }
-header .selected_game:hover {
-    background-color: #2a8cae;
+nav .selected_game:hover {
+    background-color: #e9dcbe;
+		color: #8e8b82;
 }
 
 /*login-button*/
-header button {
-    position: absolute;
-    right: 16px;
+#login-button {
+		position: absolute;
+		right: 0;
+		top: 0;
+		order: 3;
+		align-self: center;
+		background-color: #8e8b82;
+		border: none;
+		color: white;
+		padding: 9px 15px 9px 15px;
+		font-size: 16px;
+}
+
+#login-button:hover {
+		background-color: #e9dcbe;
+		cursor: pointer;
+		color: #8e8b82;
 }
 
 /*LOGIN*/
@@ -151,14 +169,15 @@ footer {
 
 #users-list {
     position: fixed;
-    right: 10px;
+    left: 15px;
     bottom: 20px;
     width: 25%;
     max-height: 60%;
     min-height: 5%;
     overflow-y: auto;
-    background-color: #33263c;
+    background-color: #8e8b82;
     color: white;
+		border-radius: 2px;
     box-shadow: 0 0 10px 1px #ddd;
 }
 
@@ -170,12 +189,12 @@ footer {
 }
 
 .users-list__user:hover {
-    background-color: #65374d;
+    background-color: #343434;
     cursor: pointer;
 }
 
 .users-list__user__login {
-    color: #2f9bc1;
+    color: white;
     font-weight: bold;
     margin: 0 10px 0 10px;
     padding: 0 10px 0 10px;
@@ -185,7 +204,7 @@ footer {
 
 .users-list__label {
     text-align: center;
-    border-top: 2px solid #44373e;
-    color: #177;
+    border-top: 2px solid #f3f3f3;
+    color: #e9dcbe;
     padding: 3px 0 3px 0;
 }
