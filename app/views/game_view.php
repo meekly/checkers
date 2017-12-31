@@ -19,3 +19,4 @@
     Users online
   </div>
 </div>
+<div class="users-list__toggler">Users online></div>

@@ -55,13 +55,15 @@ nav .selected_game:hover {
 		color: #8e8b82;
 }
 
-/*login-button*/
-#login-button {
+/* Right side buttons */
+.right-side {
 		position: absolute;
 		right: 0;
 		top: 0;
 		order: 3;
 		align-self: center;
+}
+.menu-button {
 		background-color: #8e8b82;
 		border: none;
 		color: white;
@@ -69,9 +71,14 @@ nav .selected_game:hover {
 		font-size: 16px;
 }
 
-#login-button:hover {
+.menu-button:hover {
 		background-color: #e9dcbe;
 		cursor: pointer;
+		color: #8e8b82;
+}
+
+.menu-button.active {
+		background-color: #e9dcbe;
 		color: #8e8b82;
 }
 
@@ -168,6 +175,7 @@ footer {
 }
 
 #users-list {
+		display: none;
     position: fixed;
     left: 15px;
     bottom: 20px;
@@ -207,4 +215,34 @@ footer {
     border-top: 2px solid #f3f3f3;
     color: #e9dcbe;
     padding: 3px 0 3px 0;
+		cursor: pointer;
+}
+
+.users-list__toggler {
+		position: fixed;
+    left: 15px;
+    bottom: 20px;
+		cursor: pointer;
+		text-align: center;
+    border-top: 2px solid #f3f3f3;
+    color: #e9dcbe;
+    padding: 3px 10px 3px 10px;
+		background-color: #8e8b82;
+		border-radius: 5px;
+}
+
+.users-list__toggler:hover {
+		background-color: #343434;
+}
+
+
+
+#chat {
+		display: none;
+		position: absolute;
+		top: 40px;
+		right: 10px;
+		background-color:#e9dcbe;
+		height: 40px;
+		width: 25%;
 }

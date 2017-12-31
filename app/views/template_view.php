@@ -11,14 +11,17 @@
       <!--HEADER-->
       <nav>
 				<a href="/"><img src="img/king-black.png"> Cool Checkers</a>
-				
-				<button id="login-button" onclick="location.href = '/login'">
-					<?php if ($_SESSION['name'] == 'guest'): ?>
-            Log in
-					<?php else: ?>
-            Log out            
-          <?php endif ?>
-        </button>
+
+				<div class="right-side">
+					<button id="chat-button" class="menu-button">Chat</button>
+					<button id="login-button" class="menu-button" onclick="location.href = '/login'">
+						<?php if ($_SESSION['name'] == 'guest'): ?>
+							Log in
+						<?php else: ?>
+							Log out            
+						<?php endif ?>
+					</button>
+				</div>
 				
         <span id="single">vs computer</span>
         <?php if (!empty($_SESSION['game_type']) && $_SESSION['game_type'] == "offline"): ?>

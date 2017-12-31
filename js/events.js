@@ -49,4 +49,25 @@ function bindEvents() {
 				location.href = '/online';
 		}
 		*/
+
+		// USERS_LIST TOGGLER EVENT
+		document.getElementsByClassName("users-list__label")[0].addEventListener("click", function(e){
+				document.getElementsByClassName("users-list__toggler")[0].style.display = "block";
+				document.getElementById("users-list").style.display = "none";
+		});
+		document.getElementsByClassName("users-list__toggler")[0].addEventListener("click", function(e){
+				document.getElementById("users-list").style.display = "block";
+				document.getElementsByClassName("users-list__toggler")[0].style.display = "none";
+		});;
+
+		document.getElementById("chat-button").addEventListener("click", function(e){
+				var chat = document.getElementById("chat");
+				if (e.target.classList.contains("active")) {
+						chat.style.display = "none";
+						e.target.classList.remove("active");
+				} else {
+						e.target.classList.add("active");
+						chat.style.display = "block";
+				}
+		});
 }
