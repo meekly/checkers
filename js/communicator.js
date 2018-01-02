@@ -6,7 +6,6 @@ function Communicator(login, userId) {
 		}
 
 		this.activate(userId, login);
-
 }
 
 Communicator.prototype.activate = function(userId, login) {
@@ -34,6 +33,66 @@ Communicator.prototype.denyPlay = function(user_id) {
 
 };
 
+Communicator.prototype.createNewUser = function(json) {
+		var user = document.createElement("div");
+		user.classList.add("users-list__user");							// Creating a new user in list
+		user.setAttribute("data-user-id", json["user_id"]); // Setting ID
+		var userName = document.createElement("span");
+		userName.classList.add("users-list__user__name");
+		userName.innerHTML = json["user_name"];
+		/*
+			var userLogin = document.createElement("span");
+			userLogin.classList.add("users-list__user__login");
+			userLogin.innerHTML = json["user_login"];
+		*/
+		var userStatus = document.createElement("i");
+		userStatus.classList.add("users-list__user__status");
+		userStatus.innerHTML = translateStatus(json["status"]);
+
+		user.appendChild(userName);
+		//user.appendChild(userLogin);
+		user.appendChild(userStatus);
+		return user;
+};
+
+
+Communicator.prototype.changeUserStatus = function(json) {
+		var users = document.getElementsByClassName("users-list__user");
+		for(var i = 0; i < users.length; ++i) {
+				if (users[i].getAttribute("data-user-id") == json["user_id"]) {
+						var user = users[i];
+						break;
+				}
+		}
+		if (i == users.length) {		// None was found
+				users.appendChild(this.createNewUser(json));
+				return;
+		}
+		var status = user.getElementsByClassName("users-list__user__status");
+		status.innerHTML = translateStatus("status");
+};
+
+
 Communicator.prototype.dispatch = function(message) {
 		// Show messages, accepting/denying plays
+		var JSONmessage = JSON.parse(message);
+		switch(JSONmessage.type) {
+		case "change-status":
+				this.changeUserStatus(JSONmessage);
+				break;
+		}
 };
+
+// {"type":"change-status", "user_id": //..., "user_name": //..., "status": ("online"|"offline"|"busy")}
+function translateStatus(status) {
+		switch(status) {
+		case "online":
+				return "Готов играть";
+		case "offline":
+				return "Только что вышел";
+		case "busy":
+				return "В бою";
+		default:
+				return "Непонятно";
+		}
+}

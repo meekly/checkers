@@ -39,7 +39,7 @@ function Checkers() {
     // ---
     this.typeGame = "signle";
     this.TURN = "white";
-    this.socketState = "undefined";
+    this.socketState = undefined;
     this.imgKingBlack = new Image();
     this.imgKingWhite = new Image();
     this.imgKingBlack.src = "img/king-black.png";
@@ -433,8 +433,8 @@ Checkers.prototype._gameOver = function() {
         }
         else if (this.TURN == "white") setTimeout(this.displayMessage.bind(this, "YOU LOSE"), 1000);
         else setTimeout(this.displayMessage.bind(this, "YOU WIN"), 1000);
-        this.socketState = "finish";
-        Socket.close();
+        this.socketState = undefined;
+				//Socket.close();
     }
 }
 

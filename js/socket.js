@@ -12,7 +12,7 @@ function openSocket() {
     socket.onerror = function(error) {
         debug("connection error. ");
         Game.setSocketState("noconnection");
-        Game._gameOver();
+        // Game._gameOver();				
     }
 
     // Обработчик соединения
