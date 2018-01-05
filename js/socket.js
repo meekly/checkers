@@ -55,6 +55,7 @@ function openSocket() {
         }
         catch(exc) {
             debug("bad server answer " + exc.name);
+						console.log(exc);
         }        
     }
 		socket.active = function() {

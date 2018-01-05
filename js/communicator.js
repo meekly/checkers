@@ -9,16 +9,16 @@ function Communicator(login, userId) {
 }
 
 Communicator.prototype.activate = function(userId, login) {
-		if (Socket.active()) {
-				Socket.send("connect&"+userId+"&"+login); // Send socket that I am active
+	//	if (Socket.active()) {
+	//			Socket.send("connect&"+userId+"&"+login); // Send socket that I am active
 				Socket.register("invite", this);
 				Socket.register("invite-deny", this);
 				Socket.register("invite-accept", this);
 				Socket.register("change-status", this);
 				Socket.register("busy", this);
-		} else {
-				setTimeout(this.activate.bind(this, userId, login), 30000);
-		}
+	//	} else {
+	//			setTimeout(this.activate.bind(this, userId, login), 30000);
+	//	}
 }
 
 Communicator.prototype.playWith = function(user_id) {
@@ -40,17 +40,16 @@ Communicator.prototype.createNewUser = function(json) {
 		var userName = document.createElement("span");
 		userName.classList.add("users-list__user__name");
 		userName.innerHTML = json["user_name"];
-		/*
-			var userLogin = document.createElement("span");
-			userLogin.classList.add("users-list__user__login");
-			userLogin.innerHTML = json["user_login"];
-		*/
+		var userLogin = document.createElement("span");
+		userLogin.classList.add("users-list__user__login");
+		userLogin.innerHTML = json["user_login"];
+
 		var userStatus = document.createElement("i");
 		userStatus.classList.add("users-list__user__status");
 		userStatus.innerHTML = translateStatus(json["status"]);
 
 		user.appendChild(userName);
-		//user.appendChild(userLogin);
+		user.appendChild(userLogin);
 		user.appendChild(userStatus);
 		return user;
 };
@@ -65,10 +64,13 @@ Communicator.prototype.changeUserStatus = function(json) {
 				}
 		}
 		if (i == users.length) {		// None was found
-				users.appendChild(this.createNewUser(json));
+				var usersList = document.getElementById("users-list");
+				console.log(usersList);
+				usersList.prepend(this.createNewUser(json));
+				console.log(this.createNewUser(json));
 				return;
 		}
-		var status = user.getElementsByClassName("users-list__user__status");
+		var status = users.getElementsByClassName("users-list__user__status")[0];
 		status.innerHTML = translateStatus("status");
 };
 
