@@ -25,7 +25,7 @@
 
   Исходящие сообщения:
   - connect - первое сообщение после подключения, отправляем свой ид и имя пользователя на сервер
-    {"type":"connect", "user_id": //..., "user_name": //...}
+    {"type":"connect", "user_id": //..., "user_name": //..., "user_login": //...}
   - invite - приглашаем пользователя по его id для совместной игры
     {"type":"invite", "user_id": //...}
   - invite-accept - подтверждаем полученное приглашение, ходим первыми
@@ -52,15 +52,15 @@
     - online - доступен для игры
     - offline - вышел из игры
     - busy - находиться в игре с другим игроком 
-    {"type":"change-status", "user_id": //..., "user_name": //..., "status": ("online"|"offline"|"busy")}
+    {"type":"change-status", "user_id": //..., "user_name": //..., "user_login": //..., "status": ("online"|"offline"|"busy")}
   - opponent-surrender - узнаем, что наш противник сдался, мы победили
     {"type":"opponent-surrender"}
   - message - принимаем сообщение от пользователя, с котором идет текущая игра
     {"type":"message", "text": //...}
   - message-all - узнаем о сообщении в общем чате от пользователя user_id
-    {"type":"message-all", "text": //..., "user_id": //..., "user_name": //...}
+    {"type":"message-all", "text": //..., "user_id": //..., "user_name": //..., "user_login": //...}
   - message-history - узнаем историю сообщений в чате при подключении, size - число сообщений
-    {"type":"message-history", "size": //..., "messages": [{"text": //..., "user_id": //..., "user_name": //...}]}
+    {"type":"message-history", "size": //..., "messages": [{"text": //..., "user_id": //..., "user_name": //..., "user_login": //..}]}
 
 Meekly:
 	Если перезагрузить страницу, то вся история чата, игра - удалятся. Это можно подправить только

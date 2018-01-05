@@ -37,15 +37,16 @@ while (true) {
 					'type' => 'change-status',
 					'status' => $info[(int)$client]['state'],
 					'user_id' => $info[(int)$client]['user_id'],
-					'user_name' => $info[(int)$client]['user_name']);
+					'user_name' => $info[(int)$client]['user_name'],
+					'user_login' => $info[(int)$client]['user_login']);
 				onMessage($connect, $msg);
 			}
 
 			//отправляем подключившимуся игроку историю чата
 			onMessage($connect, array(
 				'type' => 'message-history',
-				'size' => 20,
-				'messages' => $chat->get(20)));
+				'size' => $chat->size(),
+				'messages' => $chat->get()));
 			
 			//добавляем новое подключение
 			$connects[(int)$connect] = $connect;
@@ -75,11 +76,13 @@ while (true) {
 				$info[(int)$connect]['state'] = 'online';
 				$info[(int)$connect]['user_id'] = $data['user_id'];
 				$info[(int)$connect]['user_name'] = $data['user_name'];
+				$info[(int)$connect]['user_login'] = $data['user_login'];
 				//отправляем всем, что подключился новый игрок
 				$msg = array(
 					'type' => 'change-status',
 					'user_id' => $data['user_id'],
-					'user_name' => $data['user_name']);
+					'user_name' => $data['user_name'],
+					'user_login' => $data['user_login']);
 				foreach ($connects as $client) {
 					if ($connect != $client) {
 						onMessage($client, $msg);
@@ -184,6 +187,7 @@ while (true) {
 					'type' => 'message-all',
 					'user_id' => $info[(int)$connect]['user_id'],
 					'user_name' => $info[(int)$connect]['user_name'],
+					'user_login' => $info[(int)$connect]['user_login'],
 					'text' => $data['text']);
 				foreach ($connects as $client) {
 					if ($client != $connect) {

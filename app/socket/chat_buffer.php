@@ -18,9 +18,12 @@ class ChatBuffer {
     }
     //вернуть массив сообщений
     function get($num) {
-        if ($num > $this->size) $num = $this->size;
-        if ($this->buffer[$this->size -1] === false && $num > $this->index) $num = $this->index;
-        if ($num < 1) return false;
+        if ($num == null) $null = $this->size;
+        else {
+            if ($num > $this->size) $num = $this->size;
+            if ($this->buffer[$this->size -1] === false && $num > $this->index) $num = $this->index;
+            if ($num < 1) return false;
+        }
 
         $i = $this->index ? $this->index -1 : $this->size -1;        
 
@@ -30,5 +33,10 @@ class ChatBuffer {
         }
         ksort($result);
         return $result;
+    }
+    //вернуть число сообщений в буфере
+    function size() {
+        if ($this->buffer[$this->size -1] === false) return $this->index;
+        else return $this->size;
     }
 }
