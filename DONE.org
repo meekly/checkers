@@ -1,7 +1,7 @@
 * Исходящие сообщения
 ** DONE {"type":"connect", "user_id": //..., "user_name": //...}
 
-** TODO {"type":"invite", "user_id": //...}
+** DONE {"type":"invite", "user_id": //...}
 
 ** TODO {"type":"invite-accept", "user_id": //...}
 
@@ -35,5 +35,5 @@
 ** TODO {"type":"message", "text": //...}
 
 ** TODO {"type":"message-all", "text": //..., "user_id": //..., "user_name": //...}
-
+	 
 ** TODO {"type":"message-history", "size": //..., "messages": [{"text": //..., "user_id": //..., "user_name": //...}]}

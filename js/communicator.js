@@ -9,27 +9,22 @@ function Communicator(login, userId) {
 }
 
 Communicator.prototype.activate = function(userId, login) {
-	//	if (Socket.active()) {
-	//			Socket.send("connect&"+userId+"&"+login); // Send socket that I am active
 				Socket.register("invite", this);
 				Socket.register("invite-deny", this);
 				Socket.register("invite-accept", this);
 				Socket.register("change-status", this);
 				Socket.register("busy", this);
-	//	} else {
-	//			setTimeout(this.activate.bind(this, userId, login), 30000);
-	//	}
 }
 
-Communicator.prototype.playWith = function(user_id) {
-		// Play with the user (Socket send)
+Communicator.prototype.promptAPlay = function(json) {
+
 };
 
-Communicator.prototype.acceptPlay = function(user_id) {
+Communicator.prototype.acceptPlay = function(json) {
 		// Accept the play (Socket send)
 };
 
-Communicator.prototype.denyPlay = function(user_id) {
+Communicator.prototype.denyPlay = function(json) {
 
 };
 
@@ -66,20 +61,47 @@ Communicator.prototype.changeUserStatus = function(json) {
 		if (i == users.length) {		// None was found
 				var usersList = document.getElementById("users-list");
 				console.log(usersList);
-				usersList.prepend(this.createNewUser(json));
+				var user = this.createNewUser(json);
+				usersList.prepend(user);
 				console.log(this.createNewUser(json));
-				return;
+		} else {
+				var status = users.getElementsByClassName("users-list__user__status")[0];
+				status.innerHTML = translateStatus(json["status"]);
 		}
-		var status = users.getElementsByClassName("users-list__user__status")[0];
-		status.innerHTML = translateStatus("status");
+
+		if (translateStatus(json["status"]) == "Готов играть") {
+				user.setAttribute("data-can-play", 1);
+				user.addEventListener("click", this.handleInviteClick.bind(this, json));
+		} else {
+				user.setAttribute("data-can-play", 0);
+		}
+		
 };
 
+Communicator.prototype.handleInviteClick = function(user) {
+		// FIXME более красивая форма
+		if(myConfirm("Пригласить пользователя " + user.user_login + "?")) {
+				Socket.invite(user_id);
+		}
+}
 
 Communicator.prototype.dispatch = function(message) {
 		// Show messages, accepting/denying plays
 		var JSONmessage = JSON.parse(message);
 		switch(JSONmessage.type) {
+		case "invite":
+				// Ask for a play
+				this.promptAPlay(JSONmessage);
+				break;
+		case "invite-accept":
+				// Game accepted
+				this.acceptPlay(JSONmessage);
+				break;
+		case "invite-deny":
+				this.denyPlay(JSONmessage);
+				break;
 		case "change-status":
+				// Display status of a player
 				this.changeUserStatus(JSONmessage);
 				break;
 		}

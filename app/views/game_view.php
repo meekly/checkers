@@ -10,11 +10,12 @@
 
 <!-- Users online -->
 <div id="users-list">
-  <div class="users-list__user" data-user-id="1">
+  <div class="users-list__user" data-user-id="1" data-can-play="0">
     <span class="users-list__user__name">Freddy</span>
     <span class="users-list__user__login">fred56</span>
     <i class="users-list__user__status">Скучает</i>
   </div>
+	
   <div class="users-list__label">
     Users online
   </div>

@@ -25,31 +25,6 @@ function bindEvents() {
 				})
 		}
 
-    /** CLEAR CLASS BUTTONS */
-		//document.getElementById("new_online").className = "";
-		//document.getElementById("new_multi").className = "";
-		//document.getElementById("new_single").className = "";
-		
-		/** START NEW GAME BUTTONS */
-		/*
-		[["single", "/"],
-		 ["multi", "offline"],
-		 ["online", "online"]].forEach(function (item) {
-				 document.getElementById(item[0]).onclick = new Function("location.href = '"+item[1]+"'");
-		 });
-		*/
-		/*
-		document.getElementById("single").onclick = function() {
-				location.href = '/';
-		}
-		document.getElementById("multi").onclick = function() {
-				location.href = '/offline';
-		}
-		document.getElementById("online").onclick = function() {
-				location.href = '/online';
-		}
-		*/
-
 		// USERS_LIST TOGGLER EVENT
 		document.getElementsByClassName("users-list__label")[0].addEventListener("click", function(e){
 				document.getElementsByClassName("users-list__toggler")[0].style.display = "block";
@@ -60,6 +35,7 @@ function bindEvents() {
 				document.getElementsByClassName("users-list__toggler")[0].style.display = "none";
 		});;
 
+		// CHAT TOGGLER
 		document.getElementById("chat-button").addEventListener("click", function(e){
 				var chat = document.getElementById("chat");
 				if (e.target.classList.contains("active")) {
@@ -70,4 +46,6 @@ function bindEvents() {
 						chat.style.display = "block";
 				}
 		});
+
+		// INVITATION EVENTS
 }

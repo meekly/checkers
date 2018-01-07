@@ -56,31 +56,5 @@ function ajax(method, url, data, success, error) {
 
 // Confirmation
 function myConfirm(message) {
-		var res = false;
-		var ch = false;
-    $('<div></div>').appendTo('body')
-        .html('<div><h6>'+message+'?</h6></div>')
-        .dialog({
-            modal: true, title: '...', zIndex: 10000, autoOpen: true,
-            width: 'auto', resizable: false,
-            buttons: {
-                Yes: function () {
-                    // $(obj).removeAttr('onclick');                                
-                    // $(obj).parents('.Parent').remove();
-
-                    res = true;
-										ch = true;
-                    $(this).dialog("close");
-                },
-                No: function () {                                                                 
-										ch = true;
-                    $(this).dialog("close");
-                }
-            },
-            close: function (event, ui) {
-                $(this).remove();
-            }
-        });
-		while (!ch);
-		return res;
+		
 }

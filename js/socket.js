@@ -60,7 +60,7 @@ function openSocket() {
     }
 		socket.active = function() {
 				return socket.readyState == 3;
-		}
+		};
     // Обработчик закрытия соединения
     socket.onclose = function() {        
         console.log("socket closed");
@@ -68,6 +68,16 @@ function openSocket() {
             Game.setSocketState("error");
             //Game._gameOver();
         }
-    }
+    };
+
+		// Исходящие сообщения
+		socket.invite = function(userId) {
+				socket.send(
+						JSON.stringify({
+								type: "invite",
+								user_id: userId
+						}));
+		};
+		
     return socket;
 }
