@@ -30,40 +30,20 @@ function openSocket() {
 						} else {
 								debug("Unable to dispatch type: "+type);
 						}
-						
-						/* Old method
-            if (data[0] == "msg") {
-                if (data[1] == "wait") {
-                    Game.setSocketState("wait");
-                    setTimeout('displayMessage("WAIT FOR ENOTHER PLAYER", 48)', 500);
-                }
-                else if (data[1] == "run") {
-                    if (data[2] == "black") {
-                        Game._endTurn();
-
-                    }
-                    Game.setSocketState("run");
-                    Game.drawField();
-                }
-                else if (data[1] == "stop") {
-                    socket.close;  
-                    Game.setSocketState("closed");
-                }
-            }
-            else if (data[0] == "turn") Game.onlineTurn(data[1], data[2], data[3], data[4]);
-						*/
         }
         catch(exc) {
             debug("bad server answer " + exc.name);
-						console.log(exc);
+						debug(exc);
         }        
-    }
+		}
+
 		socket.active = function() {
 				return socket.readyState == 3;
 		};
+
     // Обработчик закрытия соединения
-    socket.onclose = function() {        
-        console.log("socket closed");
+    socket.onclose = function(e) {        
+        debug("socket closed: " + e.code);
         if (Game.socketState == "run") {
             Game.setSocketState("error");
             //Game._gameOver();

@@ -81,7 +81,7 @@ Communicator.prototype.changeUserStatus = function(json) {
 Communicator.prototype.handleInviteClick = function(user) {
 		// FIXME более красивая форма
 		if(myConfirm("Пригласить пользователя " + user.user_login + "?")) {
-				Socket.invite(user_id);
+				Socket.invite(user.user_id);
 		}
 }
 
