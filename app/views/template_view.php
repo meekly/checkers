@@ -5,7 +5,6 @@
     <title>checkers</title>
     <!--LINK CSS-->
     <link href="css/style.css" rel="stylesheet">
-		<link href="js/jquery-ui/jquery-ui.min.css" rel="stylesheet">
   </head>
   <body>
     <div class="main">

@@ -179,7 +179,7 @@ footer {
     position: fixed;
     left: 15px;
     bottom: 20px;
-    width: 25%;
+    width: 400px;
     max-height: 60%;
     min-height: 5%;
     overflow-y: auto;

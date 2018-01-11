@@ -204,11 +204,11 @@ while (true) {
 fclose($socket);
 
 function onMessage($connect, $data) {
-	echo "Message: $data \n";
+	echo "Message:" . implode(',', $data) . " \n";
 	fwrite($connect, encode(json_encode($data))); 
 }
 
-
+ 
 /**
  * Функции, необходимые для установки соединения, кодирования данных и
  * декодирования входящих данных.

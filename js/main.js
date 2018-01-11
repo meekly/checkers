@@ -1,7 +1,7 @@
 var Game, Socket, Darwin, chat, globalChat;
 document.addEventListener("DOMContentLoaded", function(){
 		Socket = openSocket(); // Глобальный объект для отправки сообщений Socket.send()
-		Darwin = new Communicator('ian', 1); // Отвечает за вывод приглашений, показ страничек, связывает клиент и сервер
+		Darwin = new Communicator(1, 'ian', 'IanLeka'); // Отвечает за вывод приглашений, показ страничек, связывает клиент и сервер FIXME Нужно откуда-то брать логин и айди с именем
 		Game = new Checkers(); // Игра и всё, что связано с нейx
 		chat = new Chat();
 		globalChar = new GlobalChat();
