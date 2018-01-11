@@ -17,13 +17,11 @@ class ChatBuffer {
         if (++$this->index >= $this->size) $this->index = 0;
     }
     //вернуть массив сообщений
-    function get($num=null) {
+    function get($num = null) {
         if ($num == null) $num = $this->size;
-        else {
-            if ($num > $this->size) $num = $this->size;
-            if ($this->buffer[$this->size -1] === false && $num > $this->index) $num = $this->index;
-            if ($num < 1) return false;
-        }
+        else if ($num > $this->size) $num = $this->size;
+        else if ($num < 1) return false;
+        if ($this->buffer[$this->size -1] === false && $num > $this->index) $num = $this->index;        
 
         $i = $this->index ? $this->index -1 : $this->size -1;        
 
