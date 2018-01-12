@@ -103,6 +103,15 @@ function openSocket() {
 		);
 	};
 
+	// Message to all
+	socket.messageAll = function(text) {
+		socket.send(
+			JSON.stringify({
+				type: "message-all",
+				text: text
+			})
+		);
+	};
 	// Обработчик закрытия соединения
 	socket.onclose = function(e) {        
 		debug("socket closed: " + e.code);

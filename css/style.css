@@ -255,11 +255,14 @@ footer {
 	right: 10px;
 	background-color: #eee;
 	min-height: 40px;
-	max-height: 80%;
-	overflow: auto;
 	width: 25%;
 	padding: 5px 10px 5px 10px;
 	box-shadow: 0 5px 5px 1px #ccc;
+}
+#chat .chat-area {
+	max-height: 400px;
+	overflow: auto;
+	width: 100%;
 }
 
 #chat .message {
@@ -283,6 +286,8 @@ footer {
 	background-color: white;
 	font-size: 14px;
 	display: inline-block;
+	max-width: 90%;
+	word-wrap: break-word;
 }
 #chat .message.my .text {
 	border-radius: 20px 0 20px 20px;
@@ -293,6 +298,7 @@ footer {
 }
 
 #chat .textbox textarea {
+	font-size: 14px;
 	width: 100%;
 }
 

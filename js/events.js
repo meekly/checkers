@@ -56,7 +56,7 @@ function bindEvents() {
 		var key = e.keyCode;
 		if (key == 13) {
 			var textarea = document.getElementsByClassName("textbox")[0].getElementsByTagName("textarea")[0]
-			notice(textarea.value);
+			globalChat.myMessage(textarea.value);
 			textarea.value = '';
 			return false;
 		} else if (key == 27) {

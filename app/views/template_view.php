@@ -13,7 +13,7 @@
 				<a href="/"><img src="img/king-black.png"> Cool Checkers</a>
 
 				<div class="right-side">
-					<button id="chat-button" class="menu-button">Уютненький</button>					
+					<button id="chat-button" class="menu-button">Беседочка</button>					
 						<?php if ($_SESSION['name'] == 'guest'): ?>
               <button id="login-button" class="menu-button" onclick="location.href = '/login'">
 							Войти

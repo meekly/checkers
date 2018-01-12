@@ -17,15 +17,8 @@ if (isset($_SESSION['user_name'], $_SESSION['user_id'], $_SESSION['user_login'])
 </div>
 
 <div id="chat">
-<div class="message">
-	<span class="author">Author</span>
-	<div class="text">Text Lorem ipsum lalala</div>
-</div>	
-
-<div class="message my">
-	<span class="author">Me</span>
-	<div class="text">Text Lorem ipsum lalala</div>
-</div>	
+<div class="chat-area">
+</div>
 <div class="textbox">
 	<textarea placeholder="Ваше сообщение всем"></textarea>
 </div>
