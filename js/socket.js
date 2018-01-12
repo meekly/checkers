@@ -43,6 +43,7 @@ function openSocket() {
 		return socket.readyState == 3;
 	};
 
+	// Onlogin startup message 'connect'
 	socket.connectMe = function(id, login, name) {
 		funcsOnOpen.push(function(){
 			socket.send(
@@ -58,6 +59,25 @@ function openSocket() {
 		});
 	};
 
+	// Deny an invitation to play
+	socket.acceptPlay = function(userId) {
+		socket.send(
+			JSON.stringify({
+				type: "invite-accept",
+				user_id: userId
+			})
+		);
+	};
+
+	// Accept an invitation to play
+	socket.denyPlay = function(userId) {
+		socket.send(
+			JSON.stringify({
+				type: "invite-deny",
+				user_id: userId
+			})
+		)
+	};
 	// Обработчик закрытия соединения
 	socket.onclose = function(e) {        
 		debug("socket closed: " + e.code);

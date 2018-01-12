@@ -4,26 +4,38 @@ function Communicator(userId,login, name) {
 		alert("Вы не вошли на сайт. Для продолжения - войдите или зарегистрируйтесь");
 		return;
 	}
-
-	this.activate(userId, login, name);
+	this.userId = userId;
+	this.login = login;
+	this.userName = name;
+	this.activate();
 }
 
-Communicator.prototype.activate = function(userId, login, name) {
+Communicator.prototype.activate = function() {
 	Socket.register("invite", this);
 	Socket.register("invite-deny", this);
 	Socket.register("invite-accept", this);
 	Socket.register("change-status", this);
 	Socket.register("busy", this);
-	Socket.connectMe(userId, login, name); // FIXME Не должно быть так. Нужно откуда-то брать логин и айди
-/*	Socket.send(
-	JSON.stringify(
-		{
-			type:"connect"
-		}
-	)
-	);
-	*/
-}
+	console.log("Logged in: " + LOGGED_IN);
+	if (LOGGED_IN) {
+		Socket.connectMe(this.userId, this.login, LGGED_IN+"LoggedIN"); // FIXME Не должно быть так. Нужно откуда-то брать логин и айди
+	}
+};
+
+Communicator.prototype.handleInvitation = function(json) {
+	if (confirm("Accept a play from "+json.user_id+"?")) {
+		Socket.acceptPlay(this.userId);
+	} else {
+		Socket.denyPlay(this.userId);
+	}
+};
+
+Communicator.prototype.handleInviteClick = function(user) {
+	// FIXME более красивая форма
+	if(myConfirm("Пригласить пользователя " + user.user_login + "?")) {
+		Socket.invite(user.user_id);
+	}
+};
 
 Communicator.prototype.acceptPlay = function(json) {
 	// Accept the play (Socket send)
@@ -74,10 +86,8 @@ Communicator.prototype.changeUserStatus = function(json) {
 	}
 	if (i == users.length) {		// None was found
 		var usersList = document.getElementById("users-list");
-		console.log(usersList);
 		var user = this.createNewUser(json);
 		usersList.prepend(user);
-		console.log(this.createNewUser(json));
 	} else {
 		var status = users.getElementsByClassName("users-list__user__status")[0];
 		status.innerHTML = translateStatus(json["status"]);
@@ -92,20 +102,13 @@ Communicator.prototype.changeUserStatus = function(json) {
 	}
 };
 
-Communicator.prototype.handleInviteClick = function(user) {
-	// FIXME более красивая форма
-	if(myConfirm("Пригласить пользователя " + user.user_login + "?")) {
-		Socket.invite(user.user_id);
-	}
-}
-
 Communicator.prototype.dispatch = function(message) {
 	// Show messages, accepting/denying plays
 	var JSONmessage = JSON.parse(message);
 	switch(JSONmessage.type) {
 		case "invite":
 			// Ask for a play
-			this.promptAPlay(JSONmessage);
+			this.handleInvitation(JSONmessage);
 			break;
 		case "invite-accept":
 			// Game accepted

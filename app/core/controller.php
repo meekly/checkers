@@ -30,8 +30,8 @@ class Controller {
     // Если пришел логин и пароль пытаемся залогиниться
     if (isset($_POST['login'])) {
       if($this->model->is_user($_POST['login'], $_POST['password'])) {
-	$_SESSION['name'] = 'user';
-	header('Location: /mypage');
+				$_SESSION['name'] = 'user';
+				header('Location: /mypage');
       }
       else $this->view->login_view("Неверный логин или пароль");
     }		

@@ -18,10 +18,10 @@ class View {
 		$this->_generate('msg_view.php', array('events.js'), $msg);
 	}
 	function login_view($msg = null) {
-		$this->_generate('login_view.php', array_merge(CORE_JS, array('forms_validator.js')), $msg);
+		$this->_generate('login_view.php', array('forms_validator.js', 'events.js'), $msg);
 	}
 	function signup_view($msg = null) {
-		$this->_generate('signup_view.php', array_merge(CORE_JS, array('forms_validator.js')), $msg);
+		$this->_generate('signup_view.php', array('forms_validator.js', 'events.js'), $msg);
 	}
 	function mypage_view($msg = null) {
 		$this->game_view();
