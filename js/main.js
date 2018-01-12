@@ -14,6 +14,57 @@ document.addEventListener("DOMContentLoaded", function(){
 
 // HELPERS
 
+
+// Confirmation
+function myConfirm(message, yesCallback, noCallback) {
+	if (yesCallback === undefined || yesCallback == null) {
+		yesCallback = function(){};
+	}
+	if (noCallback === undefined || noCallback == null) {
+		noCallback = function(){};
+	}
+
+	var confirmation = document.createElement("div");
+	confirmation.classList.add("confirmation");
+	confirmation.innerHTML = message;
+	var res = null;
+	var given = false;
+
+	var yesBtn = document.createElement("button");
+	yesBtn.classList.add("yes-btn");
+	yesBtn.innerHTML = "Yes";
+	yesBtn.addEventListener("click", function() {
+		document.body.removeChild(confirmation);
+		yesCallback();
+	});
+
+	var noBtn = document.createElement("button");
+	noBtn.classList.add("no-btn");
+	noBtn.innerHTML = "No";
+	noBtn.addEventListener("click", function() {
+		document.body.removeChild(confirmation);
+		noCallback();
+	});
+
+	confirmation.appendChild(yesBtn);
+	confirmation.appendChild(noBtn);
+	document.body.appendChild(confirmation);
+	return res;
+//	return prompt(message);
+}
+
+// Notice function
+function notice(message) {
+	var notification = document.createElement("div");
+	notification.classList.add("notice");
+	notification.innerHTML = message;
+	document.getElementsByClassName("notifications")[0].appendChild(notification);
+	setTimeout(function() {
+		document.getElementsByClassName("notifications")[0].removeChild(notification);
+	}, 5000);
+}
+
+// If ajax is needed
 function ajax(method, url, data, success, error) {
 	// Success and Error callbacks
 	if (success === undefined || success == null) {
@@ -53,9 +104,4 @@ function ajax(method, url, data, success, error) {
 		xmlhttp.open("POST", url, true);		
 		xmlhttp.send(data);
 	}
-}
-
-// Confirmation
-function myConfirm(message) {
-	return prompt(message);
 }

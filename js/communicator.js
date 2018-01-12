@@ -1,7 +1,7 @@
 function Communicator(userId,login, name) {
 	if (login === undefined || login == null
 		|| userId === undefined || userId == null) {
-		alert("Вы не вошли на сайт. Для продолжения - войдите или зарегистрируйтесь");
+		notice("Вы не вошли на сайт. Для продолжения - войдите или зарегистрируйтесь");
 		return;
 	}
 	this.userId = userId;
@@ -32,9 +32,10 @@ Communicator.prototype.handleInvitation = function(json) {
 
 Communicator.prototype.handleInviteClick = function(user) {
 	// FIXME более красивая форма
-	if(myConfirm("Пригласить пользователя " + user.user_login + "?")) {
-		Socket.invite(user.user_id);
-	}
+	myConfirm("Пригласить пользователя " + user.user_login + "?",
+		function(){
+			Socket.invite(user.user_id);
+	});
 };
 
 Communicator.prototype.acceptPlay = function(json) {

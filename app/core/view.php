@@ -1,7 +1,6 @@
 <?php
 
 const CORE_JS = array(
-	'jquery.min.js',
 	'checkers_game.js',
 	'communicator.js',
 	'events.js',

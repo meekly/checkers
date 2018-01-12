@@ -225,10 +225,11 @@ footer {
 		cursor: pointer;
 		text-align: center;
     border-top: 2px solid #f3f3f3;
-    color: #e9dcbe;
     padding: 3px 10px 3px 10px;
+    color: #e9dcbe;
 		background-color: #8e8b82;
 		border-radius: 5px;
+		box-shadow: 0 0 10px 1px #ccc;
 }
 
 .users-list__toggler:hover {
@@ -245,4 +246,41 @@ footer {
 		background-color:#e9dcbe;
 		height: 40px;
 		width: 25%;
+}
+
+
+.notifications {
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+	width: 300px;
+	display: flex;
+	flex-direction: column;
+}
+
+.notice {
+	border-top: 3px solid #343434;
+	border-radius: 5px;
+	box-shadow: 0 0 10px 1px #ccc;
+	padding: 10px 15px 8px 15px;
+	color: #343434;
+	background-color: #f0f0f0;
+}
+
+.notice:hover {
+	background-color: #343434;
+	color: #e9dcbe;
+	cursor: pointer;
+}
+.confirmation {
+position: absolute;
+margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;
+
+	width: 500px;
+	height: 100px;
+	padding: 30px;
+	background-color: white;
 }

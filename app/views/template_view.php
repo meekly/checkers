@@ -41,6 +41,8 @@
         <?php include 'app/views/'.$content_view; ?>
       </div>
 
+			<div class="notifications">
+			</div>
       <!--FOOTER-->
       <footer>© Andrey, Valentin 2017</footer>
 
