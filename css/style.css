@@ -1,251 +1,261 @@
 * {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 body {
-    font-family: 'Open Sans', sans-serif; /* Шрифт текста */    
-    color: #1f1f1f; /* Цвет текста */
-    background-color: #f0f0f0; /* Цвет фона всей страницы */
+	font-family: 'Open Sans', sans-serif; /* Шрифт текста */    
+	color: #1f1f1f; /* Цвет текста */
+	background-color: #f0f0f0; /* Цвет фона всей страницы */
 }
 
 .main {
-    height: 100%; /* Высота страницы */
-    width: 100%; /* Ширина страницы */    
+	height: 100%; /* Высота страницы */
+	width: 100%; /* Ширина страницы */    
 }
 
 /*NAV*/
 nav {
-		/*    padding: 0.8%; /* Поля вокруг заголовка */
-		display: flex;
-		flex-direction: row;
-    margin-bottom: 32px;
-    background-color: #343434; /* Цвет фона заголовка */
-		height: 40px;
+	/*    padding: 0.8%; /* Поля вокруг заголовка */
+	-webkit-user-select: none;  /* Chrome all / Safari all */
+	-moz-user-select: none;     /* Firefox all */
+	-ms-user-select: none;      /* IE 10+ */
+	user-select: none; 
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	margin-bottom: 32px;
+	background-color: #343434; /* Цвет фона заголовка */
+	height: 40px;
+	width: 100%;
 }
 nav > a {
-    color: #fff; /* Цвет теста заголовка */
-    text-decoration: none; /* Подчеркивание убираем */
-    font-size: 30px; /* Размер текста заголовка */
-		align-self: center;
-		margin-right: 20px;
+	color: #fff; /* Цвет теста заголовка */
+	text-decoration: none; /* Подчеркивание убираем */
+	font-size: 30px; /* Размер текста заголовка */
+	align-self: center;
+	margin-right: 20px;
 }
 nav img {
-		margin-left: 20px;
-    width: 27px;
-    filter: invert(100%);
+	margin-left: 20px;
+	width: 27px;
+	filter: invert(100%);
 }
 nav > span {
-		align-self: center;
-    color: #fff;
-		text-align: center;
-		line-height: 40px;
-		padding: 0 10px 0 10px;
-		height: 100%;
-    cursor: pointer;
-    bottom: 4px;  
+	align-self: center;
+	color: #fff;
+	text-align: center;
+	line-height: 40px;
+	padding: 0 10px 0 10px;
+	height: 100%;
+	cursor: pointer;
+	bottom: 4px;  
 }
 nav > span:hover {    
-    background-color: #26282d;
+	background-color: #26282d;
 }
 nav .selected_game {
-    background-color: #8e8b82;
+	background-color: #8e8b82;
 }
 nav .selected_game:hover {
-    background-color: #e9dcbe;
-		color: #8e8b82;
+	background-color: #e9dcbe;
+	color: #8e8b82;
 }
 
 /* Right side buttons */
 .right-side {
-		position: absolute;
-		right: 0;
-		top: 0;
-		order: 3;
-		align-self: center;
+	/*
+	position: absolute;
+	right: 0;
+	top: 0;
+	 */
+	margin-left: auto;
+	height: 100%;
+	order: 3;
 }
 .menu-button {
-		background-color: #8e8b82;
-		border: none;
-		color: white;
-		padding: 9px 15px 9px 15px;
-		font-size: 16px;
+	height: 100%;
+	background-color: #8e8b82;
+	border: none;
+	color: white;
+	padding: 9px 15px 9px 15px;
+	font-size: 16px;
 }
 
 .menu-button:hover {
-		background-color: #e9dcbe;
-		cursor: pointer;
-		color: #8e8b82;
+	background-color: #e9dcbe;
+	cursor: pointer;
+	color: #8e8b82;
 }
 
 .menu-button.active {
-		background-color: #e9dcbe;
-		color: #8e8b82;
+	background-color: #e9dcbe;
+	color: #8e8b82;
 }
 
 /*LOGIN*/
 #login #form_login input[type='submit'] {
-    width: 64px;
-    margin-right: 62px;
+	width: 64px;
+	margin-right: 62px;
 }
 #login button {
-    position: relative;
-    right: 8px;
-    width: 128px;
+	position: relative;
+	right: 8px;
+	width: 128px;
 }
 
 /*CONTENT*/
 #content {
-    flex: 1 0 auto;
-    padding: 32px; /* Поля вокруг содержимого */
-    margin: auto;    
+	flex: 1 0 auto;
+	padding: 32px; /* Поля вокруг содержимого */
+	margin: auto;    
 }
 
 /*FOOTER*/
 footer {
-    flex: 0 0 auto;
-    padding: 24px; /* Поля вокруг футера */
-    text-align: center;
+	flex: 0 0 auto;
+	padding: 24px; /* Поля вокруг футера */
+	text-align: center;
 }
 
 /*buttons*/
 .button {
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 4px;
-    outline: none;
-    border: 0;
-    font-weight: bold;
-    color: #fff;
+	cursor: pointer;
+	padding: 10px;
+	border-radius: 4px;
+	outline: none;
+	border: 0;
+	font-weight: bold;
+	color: #fff;
 }
 .button-green {
-    background-color: #77af12;
+	background-color: #77af12;
 }
 .button-green:hover {
-    background-color: #679710;
+	background-color: #679710;
 }
 .button-blue {
-    background-color: #2f9bc1;
+	background-color: #2f9bc1;
 }
 .button-blue:hover {
-    background-color: #2a8cae;
+	background-color: #2a8cae;
 }
 
 /*form-wrapper*/
 .form-wrapper {
-    text-align: center;
-    padding: 64px;
-    padding-left: 192px;
-    padding-right: 192px;    
-    background-color: #fff;
+	text-align: center;
+	padding: 64px;
+	padding-left: 192px;
+	padding-right: 192px;    
+	background-color: #fff;
 }
 .form-wrapper > label {
-    font-size: 22px;
+	font-size: 22px;
 }
 .form-wrapper form {
-    margin: 16px;
+	margin: 16px;
 }
 .form-wrapper .input-text {
-    margin: 8px;
-    padding: 6px;
-    width: 252px;
+	margin: 8px;
+	padding: 6px;
+	width: 252px;
 }
 .form-wrapper input[type='submit'] {
-    margin: 8px;
+	margin: 8px;
 }
 .form-wrapper .error {
-    width: 244px;
-    margin: auto;
-    margin-top: 4px;    
-    padding: 4px;
-    font-size: 14px;
-    border-radius: 2px;
-    background-color: #f2ab99;
-    border-color: #F08080;
+	width: 244px;
+	margin: auto;
+	margin-top: 4px;    
+	padding: 4px;
+	font-size: 14px;
+	border-radius: 2px;
+	background-color: #f2ab99;
+	border-color: #F08080;
 }
 .form-wrapper .msg {
-    background-color: #ADFF2F;    
+	background-color: #ADFF2F;    
 }
 
 /*game*/
 #game {
-    display: block;
-    margin-top: -44px;
-    margin-bottom: -34px;
-    text-align: center;
+	display: block;
+	margin-top: -44px;
+	margin-bottom: -34px;
+	text-align: center;
 }
 
 #users-list {
 	display: none;
-    position: fixed;
-    left: 15px;
-    bottom: 20px;
-    width: 400px;
-    max-height: 60%;
-    min-height: 5%;
-    overflow-y: auto;
-    background-color: #8e8b82;
-    color: white;
-		border-radius: 2px;
-    box-shadow: 0 0 10px 1px #ddd;
+	position: fixed;
+	left: 15px;
+	bottom: 20px;
+	width: 400px;
+	max-height: 60%;
+	min-height: 5%;
+	overflow-y: auto;
+	background-color: #8e8b82;
+	color: white;
+	border-radius: 2px;
+	box-shadow: 0 0 10px 1px #ddd;
 }
 
 .users-list__user {
-    margin: 0 auto;
-    font-family: Lucida Sans, monospace;
-    text-align: center;
-    padding: 3px 0 3px 0;
+	margin: 0 auto;
+	font-family: Lucida Sans, monospace;
+	text-align: center;
+	padding: 3px 0 3px 0;
 }
 
 .users-list__user:hover {
-    background-color: #343434;
-    cursor: pointer;
+	background-color: #343434;
+	cursor: pointer;
 }
 
 .users-list__user__login {
-    color: white;
-    font-weight: bold;
-    margin: 0 10px 0 10px;
-    padding: 0 10px 0 10px;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
+	color: white;
+	font-weight: bold;
+	margin: 0 10px 0 10px;
+	padding: 0 10px 0 10px;
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
 }
 
 .users-list__label {
-    text-align: center;
-    border-top: 2px solid #f3f3f3;
-    color: #e9dcbe;
-    padding: 3px 0 3px 0;
-		cursor: pointer;
+	text-align: center;
+	border-top: 2px solid #f3f3f3;
+	color: #e9dcbe;
+	padding: 3px 0 3px 0;
+	cursor: pointer;
 }
 
 .users-list__toggler {
-		position: fixed;
-    left: 15px;
-    bottom: 20px;
-		cursor: pointer;
-		text-align: center;
-    border-top: 2px solid #f3f3f3;
-    padding: 3px 10px 3px 10px;
-    color: #e9dcbe;
-		background-color: #8e8b82;
-		border-radius: 5px;
-		box-shadow: 0 0 10px 1px #ccc;
+	position: fixed;
+	left: 15px;
+	bottom: 20px;
+	cursor: pointer;
+	text-align: center;
+	border-top: 2px solid #f3f3f3;
+	padding: 3px 10px 3px 10px;
+	color: #e9dcbe;
+	background-color: #8e8b82;
+	border-radius: 5px;
+	box-shadow: 0 0 10px 1px #ccc;
 }
 
 .users-list__toggler:hover {
-		background-color: #343434;
+	background-color: #343434;
 }
 
 
 
 #chat {
-		display: none;
-		position: absolute;
-		top: 40px;
-		right: 10px;
-		background-color:#e9dcbe;
-		height: 40px;
-		width: 25%;
+	display: none;
+	position: absolute;
+	top: 40px;
+	right: 10px;
+	background-color:#e9dcbe;
+	height: 40px;
+	width: 25%;
 }
 
 
@@ -296,4 +306,9 @@ footer {
 .buttons {
 	display: flex;
 	justify-content: space-around;
+}
+.buttons button {
+	font-size: 16px;
+	padding: 3px 5px 3px 5px;
+	min-width: 60px;
 }
