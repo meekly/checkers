@@ -23,10 +23,17 @@ Communicator.prototype.activate = function() {
 };
 
 Communicator.prototype.handleInvitation = function(json) {
+	var self = this;
 	ask("Принять игру от пользователя "+json.user_id+"?", function() {
-		Socket.acceptPlay(this.userId);
+		Socket.acceptPlay(json.user_id);
+		// FIXME Выделить в функцию
+		Game.reinitGame("online");
+		["single", "multi", "online"].forEach(function(item){
+			document.getElementById(item).className = "";
+		})
+		document.getElementById("online").className = "selected_game";
 	}, function() {
-		Socket.denyPlay(this.userId);
+		Socket.denyPlay(json.user_id);
 	});
 };
 
@@ -42,17 +49,17 @@ Communicator.prototype.handleInviteClick = function(user) {
 Communicator.prototype.acceptPlay = function(json) {
 	// Accept the play (Socket send)
 	notice("Пользователь "+json.user_id+" принял ваш запрос");
+	// FIXME ВЫделить в функцию со строчкой 30
 	Game.reinitGame("online");
 	// Moving to Online
 	["single", "multi", "online"].forEach(function(item){
 		document.getElementById(item).className = "";
 	})
 	document.getElementById("online").className = "selected_game";
-	// Send that I've changed my status
 };
 
 Communicator.prototype.denyPlay = function(json) {
-	alert("User"+JSON.stringify(json)+" denied a game");
+	notice("Пользователь "+json.user_id+" отказал вам в игре");
 };
 
 Communicator.prototype.createNewUser = function(json) {
