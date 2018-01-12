@@ -90,7 +90,7 @@ Communicator.prototype.changeUserStatus = function(json) {
 		var user = this.createNewUser(json);
 		usersList.prepend(user);
 	} else {
-		var status = users.getElementsByClassName("users-list__user__status")[0];
+		var status = user.getElementsByClassName("users-list__user__status")[0];
 		status.innerHTML = translateStatus(json["status"]);
 	}
 
