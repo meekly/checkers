@@ -22,10 +22,10 @@ class View {
 	function signup_view($msg = null) {
 		$this->_generate('signup_view.php', array('forms_validator.js', 'events.js'), $msg);
 	}
-	function mypage_view($msg = null) {
+	/*function mypage_view($msg = null) {
 		$this->game_view();
 		//$this->_generate();
-	}
+	}*/
 
 	private function _generate($content_view, $script = null, $data = null) {		
 		/*

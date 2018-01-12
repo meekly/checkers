@@ -19,7 +19,8 @@ function route() {
 			$controller->logout_action();
 			break;
 		case 'mypage':
-			$controller->mypage_action();
+			//$controller->mypage_action();
+			header('Location: /');
 			break;
 		case 'offline':
 		case 'online':
@@ -40,9 +41,9 @@ function route() {
 		case 'logout':
 			header('Location: /logout');
 			break;
-		case 'mypage':
+		/*case 'mypage':
 			header('Location: /mypage');
-			break;
+			break;*/
 		default:
 			header('Location: /');
 		}
