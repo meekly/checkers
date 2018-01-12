@@ -7,7 +7,11 @@ function GlobalChat() {
 }
 
 GlobalChat.prototype.dispatch = function(message) {
-//		alert(message);
+	switch(message.type) {
+		case "message-history":
+			this.updateHistory(message);
+			break;
+	}
 }
 
 Chat.prototype.dispatch = function(message) {
