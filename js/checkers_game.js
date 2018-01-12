@@ -74,16 +74,18 @@ function Checkers() {
 
 
 
-Checkers.prototype.reinitGame = function(type) {
+Checkers.prototype.reinitGame = function(type, turn) {
     this.TURN = "white";
     if (type != undefined) this.typeGame = type;
     if (type == "online") {
         /**
          * Сокет будет уже открыт. Нужно либо автоматически подобрать игрока,
          * либо как-то вывести список игроков, готовых играть. Сокет будет открываться 
-         * при загрузке сайта.
-         */
-        console.log("Мы работаем над этим");
+				 * при загрузке сайта.
+				 */
+			this.TURN = turn;
+			console.log("Игра началась");
+			this.socketState = "run";
     }
     else { this.socketState = undefined; }
     for (var i = 0; i < 8; i++) {
@@ -332,7 +334,7 @@ Checkers.prototype.playerTurn = function(x, y) {
                 self.field[self.activeX][self.activeY] = {};
                 // Calling to Socket object!!!
                 if (self.typeGame == "online") {
-                    Socket.send("turn&" + activeX + "&" + activeY + "&" + x + "&" + y);
+                    Socket.makeTurn(self.activeX, self.activeY, x, y);
                 }
                 //console.log(activeX + "&" + activeY + "&" + x + "&" + y);
                 //shift to king if possible

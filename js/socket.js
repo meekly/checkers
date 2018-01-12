@@ -78,6 +78,19 @@ function openSocket() {
 			})
 		)
 	};
+
+	// Turn
+	socket.makeTurn = function(ax, ay, x, y) {
+		socket.send(
+			JSON.stringify({
+				type: "turn",
+				fromX: ax,
+				fromY: ay,
+				toX: x,
+				toY: y
+			})
+		);
+	};
 	// Обработчик закрытия соединения
 	socket.onclose = function(e) {        
 		debug("socket closed: " + e.code);

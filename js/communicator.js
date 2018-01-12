@@ -27,7 +27,7 @@ Communicator.prototype.handleInvitation = function(json) {
 	ask("Принять игру от пользователя "+json.user_id+"?", function() {
 		Socket.acceptPlay(json.user_id);
 		// FIXME Выделить в функцию
-		Game.reinitGame("online");
+		Game.reinitGame("online", "white");
 		["single", "multi", "online"].forEach(function(item){
 			document.getElementById(item).className = "";
 		})
@@ -50,7 +50,7 @@ Communicator.prototype.acceptPlay = function(json) {
 	// Accept the play (Socket send)
 	notice("Пользователь "+json.user_id+" принял ваш запрос");
 	// FIXME ВЫделить в функцию со строчкой 30
-	Game.reinitGame("online");
+	Game.reinitGame("online", "black");
 	// Moving to Online
 	["single", "multi", "online"].forEach(function(item){
 		document.getElementById(item).className = "";

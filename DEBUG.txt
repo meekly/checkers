@@ -1,21 +1,18 @@
 Сюда можно писать выявленные ошибки работы сокета, или любые другие неисправности.
 
 12-01-2018:
-При подключении к серверу (connect) возникает такая ошибка
+При осуществлении хода возникает такая ошибка
+incoming message: Array
+(
+    [type] => turn
+    [fromX] => 6
+    [fromY] => 5
+    [toX] => 7
+    [toY] => 4
+)
+PHP Notice:  Undefined index: oponnent_id in /opt/lampp/htdocs/app/socket/socket.php on line 142
 
-new connection=Resource id #8 OK
-PHP Warning:  ksort() expects parameter 1 to be array, null given in /opt/lampp/htdocs/app/socket/chat_buffer.php on line 32
+Notice: Undefined index: oponnent_id in /opt/lampp/htdocs/app/socket/socket.php on line 142
+PHP Notice:  Undefined index: oponnent_id in /opt/lampp/htdocs/app/socket/socket.php on line 142
 
-Warning: ksort() expects parameter 1 to be array, null given in /opt/lampp/htdocs/app/socket/chat_buffer.php on line 32
-Message:message-history,0, 
-PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /opt/lampp/htdocs/app/socket/socket.php:74
-Stack trace:
-#0 {main}
-  thrown in /opt/lampp/htdocs/app/socket/socket.php on line 74
-
-Fatal error: Uncaught Error: Cannot use object of type stdClass as array in /opt/lampp/htdocs/app/socket/socket.php:74
-Stack trace:
-#0 {main}
-  thrown in /opt/lampp/htdocs/app/socket/socket.php on line 74
-
-Пытаюсь тестировать игру, залогиниваясь с двух бразуеров
+Notice: Undefined index: oponnent_id in /opt/lampp/htdocs/app/socket/socket.php on line 142
