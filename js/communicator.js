@@ -23,11 +23,11 @@ Communicator.prototype.activate = function() {
 };
 
 Communicator.prototype.handleInvitation = function(json) {
-	if (confirm("Accept a play from "+json.user_id+"?")) {
+	ask("Принять игру от пользователя "+json.user_id+"?", function() {
 		Socket.acceptPlay(this.userId);
-	} else {
+	}, function() {
 		Socket.denyPlay(this.userId);
-	}
+	});
 };
 
 Communicator.prototype.handleInviteClick = function(user) {
