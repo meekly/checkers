@@ -490,7 +490,7 @@ Checkers.prototype.onlineTurn = function(fromX, fromY, toX, toY) {
     if ((toY == 0 && this.field[toX][toY].color == "white") ||
 				(toY == 7 && this.field[toX][toY].color == "black")) this.field[toX][toY].king = true;
     //make attack
-    if (typeTurn == "attack") {
+    if (this.typeTurn == "attack") {
         this.activeX = fromX;
         this.activeY = fromY;
         if (!this._makeAttack(toX, toY)) {
