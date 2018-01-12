@@ -12,6 +12,7 @@ function openSocket() {
 	socket.onerror = function(error) {
 		debug("connection error. ");
 		Game.setSocketState("noconnection");
+		socket.close();
 		// Game._gameOver();				
 	};
 
@@ -91,6 +92,17 @@ function openSocket() {
 			})
 		);
 	};
+
+	// Game Over
+	socket.gameOver = function(res) {
+		socket.send(
+			JSON.stringify({
+				type: "game-over",
+				result: res
+			})
+		);
+	};
+
 	// Обработчик закрытия соединения
 	socket.onclose = function(e) {        
 		debug("socket closed: " + e.code);

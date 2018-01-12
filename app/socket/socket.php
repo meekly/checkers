@@ -64,6 +64,17 @@ while (true) {
 		//обрабатываем закрытие соеденения
 		if (!strlen($data)) {
 			echo "connection close OK\n";
+						$msg = array(
+							'type' => 'change-status',
+							'user_id' => $info[(int)$connect]['user_id'],
+							'user_name' =>  $info[(int)$connect]['user_name'],
+							'user_login' => $info[(int)$connect]['user_login'],
+							'status' => 'offline');
+						foreach ($connects as $client) {
+							if ($connect != $client) {
+								onMessage($client, $msg);
+							}
+						}							
 			fclose($connect);
 			unset($connects[array_search($connect, $connects)]);
 			continue;
@@ -89,9 +100,10 @@ while (true) {
 							'type' => 'change-status',
 							'user_id' => $data['user_id'],
 							'user_name' => $data['user_name'],
-							'user_login' => $data['user_login']);
+							'user_login' => $data['user_login'],
+							'status' => 'online');
 						foreach ($connects as $client) {
-							if ($connect != $client) {
+							if ($info[(int)$connect]['user_id'] != $info[(int)$client]['user_id']) {
 								onMessage($client, $msg);
 							}
 						}							

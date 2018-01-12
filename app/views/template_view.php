@@ -24,18 +24,14 @@
 					</button>
 				</div>
 				
-        <span id="single">Против компьютера</span>
+        <span id="single" class="selected_game">Против компьютера</span>
         <?php if (!empty($_SESSION['game_type']) && $_SESSION['game_type'] == "offline"): ?>
           <span id="multi" class="selected_game">С собой</span>
         <?php else: ?>
           <span id="multi">С собой</span>
         <?php endif ?>
 
-				<?php if (!empty($_SESSION['game_type']) && $_SESSION['game_type'] == "online"): ?>
-          <span id="online" class="selected_game">Онлайн</span>
-        <?php else: ?>
-          <span id="online">Онлайн</span>
-        <?php endif ?>     
+          <span id="online" style="display: none;" class="selected_game">Онлайн</span>
       </nav>
       
       <div id="content">

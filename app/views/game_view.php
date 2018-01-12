@@ -10,26 +10,30 @@ if (isset($_SESSION['user_name'], $_SESSION['user_id'], $_SESSION['user_login'])
 }
 ?>
 </script>
+
 <!-- Checkers -->
 <div id="game">
   <canvas id="field" width="800" height="800"></canvas>
 </div>
 
 <div id="chat">
-  
+<div class="message">
+	<span class="author">Author</span>
+	<div class="text">Text Lorem ipsum lalala</div>
+</div>	
+
+<div class="message my">
+	<span class="author">Me</span>
+	<div class="text">Text Lorem ipsum lalala</div>
+</div>	
+<div class="textbox">
+	<textarea placeholder="Ваше сообщение всем"></textarea>
+</div>
 </div>
 
 
 <!-- Users online -->
 <div id="users-list">
-<!--
-  <div class="users-list__user" data-user-id="1" data-can-play="0">
-    <span class="users-list__user__name">Freddy</span>
-    <span class="users-list__user__login">fred56</span>
-    <i class="users-list__user__status">Скучает</i>
-  </div>
--->
-	
   <div class="users-list__label">
 		Пользователи онлайн
   </div>

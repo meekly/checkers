@@ -253,11 +253,48 @@ footer {
 	position: absolute;
 	top: 40px;
 	right: 10px;
-	background-color:#e9dcbe;
-	height: 40px;
+	background-color: #eee;
+	min-height: 40px;
+	max-height: 80%;
+	overflow: auto;
 	width: 25%;
+	padding: 5px 10px 5px 10px;
+	box-shadow: 0 5px 5px 1px #ccc;
 }
 
+#chat .message {
+	margin-bottom: 10px;
+	text-align: left;
+}
+
+#chat .message.my {
+	text-align: right;
+}
+
+#chat .message .author {
+	display: block;
+	font-size: 12px;
+	margin: 5px;
+}
+
+#chat .message .text {
+	padding: 5px 10px 5px 10px;
+	border-radius: 0 20px 20px 20px;
+	background-color: white;
+	font-size: 14px;
+	display: inline-block;
+}
+#chat .message.my .text {
+	border-radius: 20px 0 20px 20px;
+}
+
+#chat .textbox {
+	width: 100%;
+}
+
+#chat .textbox textarea {
+	width: 100%;
+}
 
 .notifications {
 	position: fixed;

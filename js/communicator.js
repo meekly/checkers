@@ -16,6 +16,7 @@ Communicator.prototype.activate = function() {
 	Socket.register("invite-accept", this);
 	Socket.register("change-status", this);
 	Socket.register("busy", this);
+	Socket.register("opponent-surrender", this);
 	console.log("Logged in: " + LOGGED_IN);
 	if (LOGGED_IN) {
 		Socket.connectMe(this.userId, this.login, this.userName); 
@@ -26,19 +27,13 @@ Communicator.prototype.handleInvitation = function(json) {
 	var self = this;
 	ask("Принять игру от пользователя "+json.user_id+"?", function() {
 		Socket.acceptPlay(json.user_id);
-		// FIXME Выделить в функцию
-		Game.reinitGame("online", "white");
-		["single", "multi", "online"].forEach(function(item){
-			document.getElementById(item).className = "";
-		})
-		document.getElementById("online").className = "selected_game";
+		self.moveToOnline("white");
 	}, function() {
 		Socket.denyPlay(json.user_id);
 	});
 };
 
 Communicator.prototype.handleInviteClick = function(user) {
-	// FIXME более красивая форма
 	ask("Пригласить пользователя " + user.user_login + "?",
 		function(){
 			Socket.invite(user.user_id);
@@ -49,17 +44,23 @@ Communicator.prototype.handleInviteClick = function(user) {
 Communicator.prototype.acceptPlay = function(json) {
 	// Accept the play (Socket send)
 	notice("Пользователь "+json.user_id+" принял ваш запрос");
-	// FIXME ВЫделить в функцию со строчкой 30
-	Game.reinitGame("online", "black");
-	// Moving to Online
-	["single", "multi", "online"].forEach(function(item){
+	this.moveToOnline("black");
+};
+Communicator.prototype.moveToOnline = function(color) {
+	Game.reinitGame("online", color);
+	["single", "multi"].forEach(function(item){
 		document.getElementById(item).className = "";
 	})
-	document.getElementById("online").className = "selected_game";
+	notice("Если вы решите сдаться, просто обновите страницу или выберите другой режим игры");
+	document.getElementById("online").style['display'] = 'block';
 };
-
 Communicator.prototype.denyPlay = function(json) {
 	notice("Пользователь "+json.user_id+" отказал вам в игре");
+};
+
+Communicator.prototype.handleOpponentSurrender = function() {
+	notice("Противник сдался");
+	Game.opponentSurrender(); // Opponent surrendered so we win
 };
 
 Communicator.prototype.createNewUser = function(json) {
@@ -85,6 +86,7 @@ Communicator.prototype.createNewUser = function(json) {
 
 
 Communicator.prototype.changeUserStatus = function(json) {
+	if (json.user_id === undefined || json.user_id == null) return;
 	var users = document.getElementsByClassName("users-list__user");
 	for(var i = 0; i < users.length; ++i) {
 		if (users[i].getAttribute("data-user-id") == json["user_id"]) {
@@ -128,6 +130,9 @@ Communicator.prototype.dispatch = function(message) {
 		case "change-status":
 			// Display status of a player
 			this.changeUserStatus(JSONmessage);
+			break;
+		case "opponent-surrender":
+			this.handleOpponentSurrender();
 			break;
 	}
 };

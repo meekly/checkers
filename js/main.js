@@ -1,16 +1,19 @@
 var USER_ID, USER_LOGIN, USER_NAME;
 var LOGGED_IN, Game, Socket, Darwin, chat, globalChat;
-document.addEventListener("DOMContentLoaded", function(){
+window.addEventListener('load', function(){
 	Socket = openSocket(); // Глобальный объект для отправки сообщений Socket.send()
 	Darwin = new Communicator(USER_ID, USER_LOGIN, USER_NAME); // Отвечает за вывод приглашений, показ страничек, связывает клиент и сервер FIXME Нужно откуда-то брать логин и айди с именем
 	Game = new Checkers(); // Игра и всё, что связано с нейx
 	chat = new Chat();
-	globalChar = new GlobalChat();
+	globalChat = new GlobalChat();
 
 
 	bindEvents(); // Обработчики нажатий на кнопки
 });
 
+window.onbeforeunload = function(){
+	Socket.close();
+};
 
 // HELPERS
 
