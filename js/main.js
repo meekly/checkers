@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 // Confirmation
-function myConfirm(message, yesCallback, noCallback) {
+function ask(message, yesCallback, noCallback) {
 	if (yesCallback === undefined || yesCallback == null) {
 		yesCallback = function(){};
 	}
@@ -32,7 +32,7 @@ function myConfirm(message, yesCallback, noCallback) {
 
 	var yesBtn = document.createElement("button");
 	yesBtn.classList.add("yes-btn");
-	yesBtn.innerHTML = "Yes";
+	yesBtn.innerHTML = "Да";
 	yesBtn.addEventListener("click", function() {
 		document.body.removeChild(confirmation);
 		yesCallback();
@@ -40,14 +40,16 @@ function myConfirm(message, yesCallback, noCallback) {
 
 	var noBtn = document.createElement("button");
 	noBtn.classList.add("no-btn");
-	noBtn.innerHTML = "No";
+	noBtn.innerHTML = "Нет";
 	noBtn.addEventListener("click", function() {
 		document.body.removeChild(confirmation);
 		noCallback();
 	});
-
-	confirmation.appendChild(yesBtn);
-	confirmation.appendChild(noBtn);
+	var buttons = document.createElement("div");
+	buttons.classList.add("buttons");
+	buttons.appendChild(yesBtn);
+	buttons.appendChild(noBtn);
+	confirmation.appendChild(buttons);
 	document.body.appendChild(confirmation);
 	return res;
 //	return prompt(message);

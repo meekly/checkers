@@ -1,10 +1,10 @@
 <script language="javascript">
 <?php
 if (isset($_SESSION['user_name'], $_SESSION['user_id'], $_SESSION['user_login'])) {
-	echo "var LOGGED_IN = true";
-	echo "var USER_NAME = {$_SESSION['user_name']};";
-	echo "var USER_ID = {$_SESSION['user_id']};";
-	echo "var USER_LOGIN = {$_SESSION['user_login']};";
+	echo "var LOGGED_IN = true;";
+	echo "var USER_NAME = '{$_SESSION['user_name']}';";
+	echo "var USER_ID = '{$_SESSION['user_id']}';";
+	echo "var USER_LOGIN = '{$_SESSION['user_login']}';";
 } else {
 	echo "var LOGGED_IN = false";
 }
@@ -31,7 +31,7 @@ if (isset($_SESSION['user_name'], $_SESSION['user_id'], $_SESSION['user_login'])
 -->
 	
   <div class="users-list__label">
-    Users online
+		Пользователи онлайн
   </div>
 </div>
-<div class="users-list__toggler">Users online></div>
+<div class="users-list__toggler">В сети&gt;</div>

@@ -18,7 +18,7 @@ Communicator.prototype.activate = function() {
 	Socket.register("busy", this);
 	console.log("Logged in: " + LOGGED_IN);
 	if (LOGGED_IN) {
-		Socket.connectMe(this.userId, this.login, LGGED_IN+"LoggedIN"); // FIXME Не должно быть так. Нужно откуда-то брать логин и айди
+		Socket.connectMe(this.userId, this.login, this.userName); 
 	}
 };
 
@@ -32,22 +32,22 @@ Communicator.prototype.handleInvitation = function(json) {
 
 Communicator.prototype.handleInviteClick = function(user) {
 	// FIXME более красивая форма
-	myConfirm("Пригласить пользователя " + user.user_login + "?",
+	ask("Пригласить пользователя " + user.user_login + "?",
 		function(){
 			Socket.invite(user.user_id);
+			notice("Запрос отправлен пользователю "+user.user_login);
 	});
 };
 
 Communicator.prototype.acceptPlay = function(json) {
 	// Accept the play (Socket send)
-	alert("User"+JSON.stringify(json)+" accepted a game");
+	notice("Пользователь "+json.user_id+" принял ваш запрос");
 	Game.reinitGame("online");
 	// Moving to Online
 	["single", "multi", "online"].forEach(function(item){
 		document.getElementById(item).className = "";
 	})
 	document.getElementById("online").className = "selected_game";
-	// Send that I am ready
 	// Send that I've changed my status
 };
 
