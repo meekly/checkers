@@ -24,7 +24,8 @@ class ChatBuffer {
         if ($this->buffer[$this->size -1] === false && $num > $this->index) $num = $this->index;        
 
         $i = $this->index ? $this->index -1 : $this->size -1;        
-
+        $result = array();
+        
         while ($num > 0) {
             $result[--$num] = $this->buffer[$i--];
             if ($i == -1) $i = $this->size -1;
