@@ -67,10 +67,12 @@ while (true) {
 			fclose($connect);
 			unset($connects[array_search($connect, $connects)]);
 			continue;
-		}
+		}		
 
 		try {
 			$data = (array)json_decode(decode($data)['payload']);
+			echo "incoming message: ";
+			print_r($data);			
 			//выполняем действия в соответствии с типом полученного сообщения
 			switch($data['type']) {
 				case 'connect':
@@ -200,11 +202,11 @@ while (true) {
 					$chat->add($msg);
 					break;
 				default:
-					echo "wft msg";
+					echo "unknown incoming message";					
 			}
 		}	
 		catch (Exception $e) {
-			echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
+			echo 'exception: ',  $e->getMessage(), "\n";
 		}
 	}
 }
