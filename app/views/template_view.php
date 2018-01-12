@@ -13,11 +13,12 @@
 				<a href="/"><img src="img/king-black.png"> Cool Checkers</a>
 
 				<div class="right-side">
-					<button id="chat-button" class="menu-button">Chat</button>
-					<button id="login-button" class="menu-button" onclick="location.href = '/login'">
+					<button id="chat-button" class="menu-button">Chat</button>					
 						<?php if ($_SESSION['name'] == 'guest'): ?>
+              <button id="login-button" class="menu-button" onclick="location.href = '/login'">
 							Log in
 						<?php else: ?>
+              <button id="login-button" class="menu-button" onclick="location.href = '/logout'">
 							Log out            
 						<?php endif ?>
 					</button>

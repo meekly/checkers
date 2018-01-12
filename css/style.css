@@ -154,8 +154,8 @@ footer {
 }
 .form-wrapper .error {
     width: 244px;
-    margin-left: 8px;
-    margin-top: 4px;
+    margin: auto;
+    margin-top: 4px;    
     padding: 4px;
     font-size: 14px;
     border-radius: 2px;
@@ -175,7 +175,7 @@ footer {
 }
 
 #users-list {
-		display: none;
+	display: none;
     position: fixed;
     left: 15px;
     bottom: 20px;
