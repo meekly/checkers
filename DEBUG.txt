@@ -1,18 +1,4 @@
 Сюда можно писать выявленные ошибки работы сокета, или любые другие неисправности.
 
-12-01-2018:
-При осуществлении хода возникает такая ошибка
-incoming message: Array
-(
-    [type] => turn
-    [fromX] => 6
-    [fromY] => 5
-    [toX] => 7
-    [toY] => 4
-)
-PHP Notice:  Undefined index: oponnent_id in /opt/lampp/htdocs/app/socket/socket.php on line 142
-
-Notice: Undefined index: oponnent_id in /opt/lampp/htdocs/app/socket/socket.php on line 142
-PHP Notice:  Undefined index: oponnent_id in /opt/lampp/htdocs/app/socket/socket.php on line 142
-
-Notice: Undefined index: oponnent_id in /opt/lampp/htdocs/app/socket/socket.php on line 142
+13-01-2018:
+Если противник обновляет страницу, то непонятно, что он сдался. 

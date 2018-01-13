@@ -17,6 +17,7 @@ function bindEvents() {
 			this.className = "selected_game";
 			document.getElementById("online").style['display'] = 'none';
 			Game.reinitGame(item);
+			if (chat !== undefined) { chat.close(); chat = undefined; }
 		}		
 	});
 
@@ -46,6 +47,7 @@ function bindEvents() {
 		} else {
 			e.target.classList.add("active");
 			chat.style.display = "block";
+			chat.getElementsByTagName("textarea")[0].focus();
 		}
 	});
 
@@ -55,7 +57,7 @@ function bindEvents() {
 		.addEventListener("keyup", function(e) {
 		var key = e.keyCode;
 		if (key == 13) {
-			var textarea = document.getElementsByClassName("textbox")[0].getElementsByTagName("textarea")[0]
+			var textarea = e.target; //document.getElementsByClassName("textbox")[0].getElementsByTagName("textarea")[0]
 			globalChat.myMessage(textarea.value);
 			textarea.value = '';
 			return false;

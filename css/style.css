@@ -234,7 +234,6 @@ footer {
 	bottom: 20px;
 	cursor: pointer;
 	text-align: center;
-	border-top: 2px solid #f3f3f3;
 	padding: 3px 10px 3px 10px;
 	color: #e9dcbe;
 	background-color: #8e8b82;
@@ -265,22 +264,22 @@ footer {
 	width: 100%;
 }
 
-#chat .message {
+.message {
 	margin-bottom: 10px;
 	text-align: left;
 }
 
-#chat .message.my {
+.message.my {
 	text-align: right;
 }
 
-#chat .message .author {
+.message .author {
 	display: block;
 	font-size: 12px;
 	margin: 5px;
 }
 
-#chat .message .text {
+.message .text {
 	padding: 5px 10px 5px 10px;
 	border-radius: 0 20px 20px 20px;
 	background-color: white;
@@ -289,7 +288,7 @@ footer {
 	max-width: 90%;
 	word-wrap: break-word;
 }
-#chat .message.my .text {
+.message.my .text {
 	border-radius: 20px 0 20px 20px;
 }
 
@@ -354,4 +353,55 @@ footer {
 	font-size: 16px;
 	padding: 3px 5px 3px 5px;
 	min-width: 60px;
+}
+
+.local-chat {
+	position: fixed;
+	top: 60px;
+	left: 15px;
+	width: 210px;
+	border-radius: 5px;
+	border-top: 2px solid #343434;
+	box-shadow: 0 0 10px 1px #ddd;
+	background-color: #f0f0f0;
+	z-index: 1;
+}
+.local-chat .textbox {
+	width: 100%;
+	font-size: 12px;
+}
+
+.local-chat .toggler {
+	text-align: center;
+	cursor: pointer;
+	background-color: #8e8b82;
+	color: #e9dcbe;
+	border-radius: 0 0 5px 5px;
+	margin-bottom: 0;
+}
+
+.local-chat .messages {
+	min-height: 20px;
+	max-height: 400px;
+	overflow: auto;
+	padding: 0 5px 0 5px;
+}
+.local-chat .label {
+	border-radius: 5px 5px 0 0;
+	font-size: 12px;
+	text-align: center;
+	background-color: #8e8b82;
+	color: white;
+}
+.chat-toggler {
+	position: fixed;
+	left: 15px;
+	top: 60px;
+	cursor: pointer;
+	text-align: center;
+	padding: 3px 10px 3px 10px;
+	color: #e9dcbe;
+	background-color: #8e8b82;
+	border-radius: 5px;
+	box-shadow: 0 0 10px 1px #ccc;
 }

@@ -1,6 +1,81 @@
 function Chat() {
 	Socket.register("message", this);
+	this.toggler = document.createElement("div");
+	this.toggler.classList.add("chat-toggler");
+	this.toggler.innerHTML = "Чат с соперником>";
+	this.toggler.style.display = "none";
+	this.toggler.addEventListener("click", this.toggleChat.bind(this, "show"));
+
+	this.localChat = document.createElement("div");
+	this.localChat.classList.add("local-chat");
+	
+	var toggler = document.createElement("div");
+	toggler.classList.add("toggler");
+	toggler.innerHTML = "Спрятать";
+	toggler.addEventListener("click", this.toggleChat.bind(this, "hide"));
+
+	var textbox = document.createElement("textarea");
+	textbox.classList.add("textbox");
+	textbox.setAttribute("placeholder", "Ваше сообщение противнику");
+
+	var messages = document.createElement("div");
+	messages.classList.add("messages");
+	
+	var label = document.createElement("div");
+	label.classList.add("label");
+	label.innerHTML = "Чат";
+
+	var message = messageElement('Судья', 'Ну вот и начинаем!');
+	this.localChat.appendChild(label);
+	messages.appendChild(message);
+	this.localChat.appendChild(messages);
+	this.localChat.appendChild(textbox);
+	this.localChat.appendChild(toggler);
+	
+	var self = this;
+	textbox.addEventListener("keyup", function(e) {
+		var key = e.keyCode;
+		if (key == 13) {
+			var message = messageElement('Я', e.target.value, true);
+			Socket.sendMessage(e.target.value);
+			var chatArea = self.localChat.getElementsByClassName("messages")[0];
+			chatArea.appendChild(message);
+			chatArea.scrollTop = chatArea.scrollHeight
+			e.target.value = '';
+		}
+	});
+	document.body.appendChild(this.localChat);
+	document.body.appendChild(this.toggler);
 }
+Chat.prototype.toggleChat = function(way) {
+	if (way == "hide") {
+		this.localChat.style.display = "none";
+		this.toggler.style.display = "block";
+	} else if (way == "show") {
+		this.localChat.style.display = "block";
+		this.toggler.style.display = "none";
+		this.localChat.getElementsByClassName("textbox")[0].focus();
+	}
+};
+Chat.prototype.handleNewMessage = function(json, isMy) {
+	var chatArea =this.localChat.getElementsByClassName("messages")[0];
+	chatArea.appendChild(messageElement('Соперник', json.text));
+	chatArea.scrollTop = chatArea.scrollHeight
+};
+
+Chat.prototype.close = function() {
+	notice("Chat closed");
+	this.localChat.remove();
+};
+
+Chat.prototype.dispatch = function(message) {
+	var JSONmessage = JSON.parse(message);
+	switch(JSONmessage.type) {
+		case "message":
+			this.handleNewMessage(JSONmessage);
+			break;
+	}
+};
 
 function GlobalChat() {
 	Socket.register("message-history", this);
@@ -73,7 +148,3 @@ GlobalChat.prototype.dispatch = function(message) {
 	}
 };
 
-Chat.prototype.dispatch = function(message) {
-	// Add to chat window
-	//	alert(message); //... yet
-};

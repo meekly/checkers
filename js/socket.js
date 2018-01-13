@@ -13,7 +13,6 @@ function openSocket() {
 		debug("connection error. ");
 		Game.setSocketState("noconnection");
 		socket.close();
-		// Game._gameOver();				
 	};
 
 	// Обработчик соединения
@@ -108,7 +107,17 @@ function openSocket() {
 		socket.send(
 			JSON.stringify({
 				type: "message-all",
-				text: text
+				text: text.trim()
+			})
+		);
+	};
+
+	// Message to opponent
+	socket.sendMessage = function(text) {
+		socket.send(
+			JSON.stringify({
+				type: "message",
+				text: text.trim()
 			})
 		);
 	};

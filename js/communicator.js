@@ -54,7 +54,9 @@ Communicator.prototype.moveToOnline = function(color) {
 	})
 	notice("Если вы решите сдаться, просто обновите страницу или выберите другой режим игры");
 	document.getElementById("online").style['display'] = 'block';
+	chat = new Chat();
 };
+
 Communicator.prototype.denyPlay = function(json) {
 	notice("Пользователь "+json.user_id+" отказал вам в игре");
 };
@@ -114,7 +116,9 @@ Communicator.prototype.changeUserStatus = function(json) {
 		var status = user.getElementsByClassName("users-list__user__status")[0];
 		status.innerHTML = translateStatus(json["status"]);
 	}
-
+	if (user.hasAttribute("data-delete")) {
+		user.removeAttribute("data-delete");
+	}
 	if (translateStatus(json["status"]) == "Готов играть") {
 		user.setAttribute("data-can-play", 1);
 		user.addEventListener("click", this.handleInviteClick.bind(this, json));
