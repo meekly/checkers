@@ -17,6 +17,9 @@ GlobalChat.prototype.newMessage = function(JSONmessage) {
 };
 
 function messageElement(login, text, isMy) {
+	if (login === undefined || login == null) {
+		login = isMy ? 'Me' : 'Anonymous';
+	}
 	var message = document.createElement("div");
 	var author = document.createElement("span");
 	var content = document.createElement("div");

@@ -7,7 +7,9 @@ window.addEventListener('load', function(){
 	chat = new Chat();
 	globalChat = new GlobalChat();
 
-
+	if (USER_ID !== undefined && USER_LOGIN !== undefined && USER_NAME !== undefined) {
+		document.getElementById("chat-button").style.display = "inline-block";
+	}
 	bindEvents(); // Обработчики нажатий на кнопки
 });
 

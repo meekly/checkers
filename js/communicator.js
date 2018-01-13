@@ -8,6 +8,7 @@ function Communicator(userId,login, name) {
 	this.login = login;
 	this.userName = name;
 	this.activate();
+	setInterval(this.clearExited.bind(this),  10000); // 1 min
 }
 
 Communicator.prototype.activate = function() {
@@ -63,6 +64,17 @@ Communicator.prototype.handleOpponentSurrender = function() {
 	Game.opponentSurrender(); // Opponent surrendered so we win
 };
 
+Communicator.prototype.clearExited = function() {
+	var users = document.getElementsByClassName("users-list__user");
+	var forDeletion = [];
+	for(var i = 0; i < users.length; ++i) {
+		if (users[i].getAttribute("data-delete") == "1") {
+			forDeletion.push(users[i]);
+		}
+	}
+	forDeletion.forEach(function(item){item.remove();});
+};
+
 Communicator.prototype.createNewUser = function(json) {
 	var user = document.createElement("div");
 	user.classList.add("users-list__user");							// Creating a new user in list
@@ -106,6 +118,9 @@ Communicator.prototype.changeUserStatus = function(json) {
 	if (translateStatus(json["status"]) == "Готов играть") {
 		user.setAttribute("data-can-play", 1);
 		user.addEventListener("click", this.handleInviteClick.bind(this, json));
+	} else if (translateStatus(json["status"]) == "Только что вышел"
+	|| translateStatus(json["status"]) == "Непонятно") {
+		user.setAttribute("data-delete", 1);
 	} else {
 		user.setAttribute("data-can-play", 0);
 		user.removeEventListener("click", this.handleInviteClick.bind(this, json));
