@@ -64,17 +64,46 @@ while (true) {
 		//обрабатываем закрытие соеденения
 		if (!strlen($data)) {
 			echo "connection close OK\n";
-						$msg = array(
+			//сообщаем всем что отключился пользователь
+			if ($info[(int)$connect]['state'] != 'connected') {
+				foreach ($connects as $client) {
+					if ($connect != $client) {
+						onMessage($client, array(
 							'type' => 'change-status',
 							'user_id' => $info[(int)$connect]['user_id'],
 							'user_name' =>  $info[(int)$connect]['user_name'],
 							'user_login' => $info[(int)$connect]['user_login'],
-							'status' => 'offline');
-						foreach ($connects as $client) {
-							if ($connect != $client) {
-								onMessage($client, $msg);
-							}
-						}							
+							'status' => 'offline'));
+					}
+				}
+			}
+			//если отключившийся игрок находился в игре
+			if ($info[(int)$connect]['state'] == 'busy') {
+				foreach ($connects as $client) {					
+					if ($info[(int)$client]['user_id'] == $info[(int)$connect]['opponent_id']) {
+						//оповещаем противника, что его соперник вышел
+						onMessage($client, array(
+							'type' => 'opponent-surrender'));
+						//сохраняем информацию о выигравшем игроке
+						$info[(int)$client]['opponent_id'] = null;
+						$info[(int)$client]['state'] = 'online';
+						$_user_id = $info[(int)$client]['user_id'];
+						$_user_name = $info[(int)$client]['user_name'];
+						$_user_login = $info[(int)$client]['user_login'];
+					}
+					//оповещаем всех, что тот игрок, который выиграл готов к новой игре
+					foreach ($connects as $client) {
+						if ($client != $connect && $info[(int)$client]['user_id'] != $_user_id) {
+							onMessage($client, array(
+								'type' => 'change-status',
+								'user_id' => $_user_id,
+								'user_name' => $_user_name,
+								'user_login' => $_user_login,
+								'status' => 'online'));
+						}
+					}
+				}
+			}
 			fclose($connect);
 			unset($connects[array_search($connect, $connects)]);
 			continue;
@@ -86,7 +115,9 @@ while (true) {
 			print_r($data);
 
 			//если нет типа у принимаемого сообщения, сообщаем об этом
-			if (!array_key_exists('type', $data)) echo "unknown incoming message";
+			if (!array_key_exists('type', $data)) {
+				//echo "unknown incoming message\n";
+			}
 			else {
 				//иначе выполняем действия в соответствии с типом полученного сообщения
 				switch($data['type']) {
@@ -218,7 +249,7 @@ while (true) {
 						$chat->add($msg);
 						break;
 					default:
-						echo "unknown message type";
+						//echo "unknown message type\n";
 						break;
 				}
 			}
