@@ -31,4 +31,4 @@ if (isset($_SESSION['user_name'], $_SESSION['user_id'], $_SESSION['user_login'])
 		Пользователи онлайн
   </div>
 </div>
-<div class="users-list__toggler">В сети&gt;</div>
+<div style="display: none;" class="users-list__toggler">В сети&gt;</div>

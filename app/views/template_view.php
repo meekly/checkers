@@ -23,7 +23,7 @@
 						<?php endif ?>
 					</button>
 				</div>
-				
+
         <span id="single" class="selected_game">Против компьютера</span>
         <?php if (!empty($_SESSION['game_type']) && $_SESSION['game_type'] == "offline"): ?>
           <span id="multi" class="selected_game">С собой</span>

@@ -14,3 +14,7 @@
         <input type="submit" value="Sign up" class="button button-blue">
     </form>        
 </div>
+<script language="javascript">
+	document.getElementById("multi").style.display = "none";
+	document.getElementById("single").style.display = "none";
+</script>

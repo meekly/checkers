@@ -4,6 +4,8 @@ function Communicator(userId,login, name) {
 		notice("Вы не вошли на сайт. Для продолжения - войдите или зарегистрируйтесь");
 		return;
 	}
+	// Authorized user can see others online
+	document.getElementsByClassName("users-list__toggler")[0].style.display = "block";
 	this.userId = userId;
 	this.login = login;
 	this.userName = name;
