@@ -41,7 +41,7 @@
 			<div class="notifications">
 			</div>
       <!--FOOTER-->
-      <footer>© Andrey, Valentin 2017</footer>
+      <footer>© Andrey, Valentin 2018</footer>
 
       <!--SCRIPTS-->
       <?php if (!empty($script)): ?>
