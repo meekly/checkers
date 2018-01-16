@@ -8,7 +8,6 @@ set_time_limit(0); 			//Время выполнения скрипта огра�
 ob_implicit_flush();		//Включаем вывод без буферизации   
 
 $socket = stream_socket_server("tcp://127.0.0.1:8888", $errno, $error); 
-
 if (!$socket) die("$error $errno");
 
 $connects = array();
@@ -16,56 +15,201 @@ $info     = [];
 $chat     = new ChatBuffer(20);
 
 while (true) {
-	//формируем массив прослушиваемых сокетов:
+	// Формируем массив прослушиваемых сокетов:
 	$read = $connects;
 	$read[]= $socket;
-	$write = $except = null;
-	
-	//ожидаем сокеты доступные для чтения (без таймаута)
+	$write = $except = null;	
+	// Ожидаем сокеты доступные для чтения (без таймаута)
 	if (!stream_select($read, $write, $except, null)) break;
-	
-	//обрабатываем новое соединение
-	if (in_array($socket, $read)) {
-		//принимаем новое соединение и производим рукопожатие:
-		if (($connect = stream_socket_accept($socket, -1)) && $info[(int)$connect] = handshake($connect)) {
-			echo "new connection=" . $connect . " OK\n";
-			
-			//отправляем подключившимуся игроку список всех текущих игроков онлайн
-			foreach ($connects as $client) {
-				if ($info[(int)$client]['state'] == 'connected') break;
-				$msg = array(
-					'type' => 'change-status',
-					'status' => $info[(int)$client]['state'],
-					'user_id' => $info[(int)$client]['user_id'],
-					'user_name' => $info[(int)$client]['user_name'],
-					'user_login' => $info[(int)$client]['user_login']);
-				onMessage($connect, $msg);
-			}
 
-			//отправляем подключившимуся игроку историю чата
-			onMessage($connect, array(
-				'type' => 'message-history',
-				'size' => $chat->size(),
-				'messages' => $chat->get()));
-			
-			//добавляем новое подключение
+	// Обрабатываем новое соединение
+	if (in_array($socket, $read)) {
+		// Принимаем новое соединение и производим рукопожатие:
+		if (($connect = stream_socket_accept($socket, -1)) && $info[(int)$connect] = handshake($connect)) {
+			echo "new connection =" . $connect . " OK\n";						
+			// Добавляем новое подключение
 			$connects[(int)$connect] = $connect;
-			$info[(int)$connect]['state'] = 'connected';
+			$info[(int)$connect]['state'] = 'not_connected';
 		}
 		unset($read[array_search($socket, $read)]);
 	}
-	
 	if (!$read) continue;
 
-	//обрабатываем все соединения
+	// Обрабатываем все соединения
 	foreach($read as $connect) {
 		$data = fread($connect, 100000);
 		
-		//обрабатываем закрытие соеденения
-		if (!strlen($data)) {
-			echo "connection close OK\n";
-			//сообщаем всем что отключился пользователь
-			if ($info[(int)$connect]['state'] != 'connected') {
+		// Если полученное сообщение не пустое, то обрабатывает его
+		if (strlen($data)) {
+			try {
+				$data = (array)json_decode(decode($data)['payload']);			
+				echo "incoming message: ";
+				print_r($data);
+
+				// Выполняем действия в соответствии с типом полученного сообщения
+				if (array_key_exists('type', $data)) {			
+					switch($data['type']) {
+						case 'connect':
+							// Заносим информацию о подключившимся игроке
+							$info[(int)$connect]['state'] = 'online';
+							$info[(int)$connect]['user_id'] = $data['user_id'];
+							$info[(int)$connect]['user_name'] = $data['user_name'];
+							$info[(int)$connect]['user_login'] = $data['user_login'];
+							// Отправляем подключившимуся игроку список всех текущих игроков онлайн
+							foreach ($connects as $client) {
+								if ($info[(int)$client]['state'] == 'not_connected') break;
+								if ($client != $connect) {
+									onMessage($connect, array(
+										'type' => 'change-status',
+										'status' => $info[(int)$client]['state'],
+										'user_id' => $info[(int)$client]['user_id'],
+										'user_name' => $info[(int)$client]['user_name'],
+										'user_login' => $info[(int)$client]['user_login']));
+								}
+							}
+							// Отправляем подключившимуся игроку историю чата
+							onMessage($connect, array(
+								'type' => 'message-history',
+								'size' => $chat->size(),
+								'messages' => $chat->get()));
+							// Отправляем всем, что подключился новый игрок
+							foreach ($connects as $client) {
+								if ($info[(int)$connect]['user_id'] != $info[(int)$client]['user_id']) {
+									onMessage($client, array(
+										'type' => 'change-status',
+										'user_id' => $data['user_id'],
+										'user_name' => $data['user_name'],
+										'user_login' => $data['user_login'],
+										'status' => 'online'));
+								}
+							}
+							break;
+
+						case 'invite':
+						case 'invite-deny':
+						case 'invite-accept':
+							//пересылаем invit-ы нужному пользователю				
+							foreach ($connects as $client) {
+								if ($info[(int)$client]['user_id'] == $data['user_id']) {
+									onMessage($client, array(
+										'type' => $data['type'],
+										'user_id' => $info[(int)$connect]['user_id'],
+										'user_name' => $info[(int)$connect]['user_name'],
+										'user_login' => $info[(int)$connect]['user_login']));
+									break;
+								}
+							}
+							//если это принятие приглашения, то нужно зафиксировать что началась новая игра
+							if ($data['type'] == 'invite-accept') {
+								//сохраняем информацию о том, что игроки заняты
+								foreach ($connects as $client) {
+									if ($info[(int)$client]['user_id'] == $data['user_id']) {
+										$info[(int)$connect]['state'] = 'busy';
+										$info[(int)$connect]['opponent_id'] = $info[(int)$client]['user_id'];
+										$info[(int)$client]['state'] = 'busy';
+										$info[(int)$client]['opponent_id'] = $info[(int)$connect]['user_id'];
+										break;
+									}
+								}
+								//оповещаем всех что пользователи начавшие игру заняты					
+								foreach ($connects as $client) {
+									if ($connect != $client) {							
+										onMessage($client, array(
+											'type' => 'change-status',
+											'status' => 'busy',
+											'user_id' => $info[(int)$connect]['user_id']));
+									}
+									if ($info[(int)$connect]['opponent_id'] != $info[(int)$client]['user_id']) {
+										onMessage($client, array(
+											'type' => 'change-status',
+											'status' => 'busy',
+											'user_id' => $info[(int)$connect]['opponent_id']));
+									}
+								}
+							}
+							break;
+
+						case 'turn':
+						case 'message':
+							//пересылаем координаты хода или сообщение противнику				
+							foreach ($connects as $client) {
+								if (array_key_exists('opponent_id', $info[(int)$client]) && $info[(int)$connect]['user_id'] == $info[(int)$client]['opponent_id']) {
+									onMessage($client, $data);
+									break;
+								}
+							}
+							break;
+
+						case 'game-over':
+							if ($data['result'] == 'win') break;
+							if ($info[(int)$connect]['state'] == 'online') { break; }
+							//оповещаем всех что пользователи закончившие игру свободны
+							foreach ($connects as $client) {
+								if ($connect != $client) {
+									onMessage($client, array(
+										'type' => 'change-status',
+										'status' => 'online',
+										'user_id' => $info[(int)$connect]['user_id']));
+								}
+								if ($info[(int)$connect]['opponent_id'] != $info[(int)$client]['user_id']) {
+									onMessage($client, array(
+										'type' => 'change-status',
+										'status' => 'online',
+										'user_id' => $info[(int)$connect]['opponent_id']));
+								}
+							}
+							//находим информацию о противнике
+							foreach ($connects as $client) {
+								if ($info[(int)$client]['user_id'] == $info[(int)$connect]['opponent_id']) {
+									//записываем результаты игры в базу
+									$model = new Model();
+									$model->save_game_result($info[(int)$connect]['opponent_id'], $info[(int)$connect]['user_id']);
+									//если surrender, оповещаем второго игрока, что он выиграл
+									if ($data['result'] == 'surrender') {
+										onMessage($client, array(
+											'type' => 'opponent-surrender'));
+									}
+									//сохраняем информацию о том, что игроки свободны
+									$info[(int)$connect]['state'] = 'online';
+									$info[(int)$connect]['opponent_id'] = false;
+									$info[(int)$client]['state'] = 'online';
+									$info[(int)$client]['opponent_id'] = false;
+									break;
+								}
+							}
+							break;
+						
+						case 'message-all':
+							//пересылаем сообщение всем пользователям
+							$msg = array(
+								'type' => 'message-all',
+								'user_id' => $info[(int)$connect]['user_id'],
+								'user_name' => $info[(int)$connect]['user_name'],
+								'user_login' => $info[(int)$connect]['user_login'],
+								'text' => $data['text']);
+							foreach ($connects as $client) {
+								if ($client != $connect) {
+									onMessage($client, $msg);
+								}
+							}
+							//сохраняем  сообщение в буфер чата
+							unset($msg['type']);
+							$chat->add($msg);
+							break;
+						default:
+							echo "unknown message type\n";
+							break;
+					}
+				}
+				else echo "unknown message type\n";
+			}
+			catch (Exception $e) { echo 'exception: ' .$e->getMessage(). "\n"; }
+		}
+		// Иначе закрываем соеденение
+		else {
+			echo "connection close OK (" .(int)$connect. ")\n";
+			// Сообщаем всем что отключился пользователь всем остальным
+			if ($info[(int)$connect]['state'] != 'not_connected') {
 				foreach ($connects as $client) {
 					if ($connect != $client) {
 						onMessage($client, array(
@@ -77,203 +221,52 @@ while (true) {
 					}
 				}
 			}
-			//если отключившийся игрок находился в игре
+			// Если отключившийся игрок находился в игре
 			if ($info[(int)$connect]['state'] == 'busy') {
 				foreach ($connects as $client) {					
 					if ($info[(int)$client]['user_id'] == $info[(int)$connect]['opponent_id']) {
-						//оповещаем противника, что его соперник вышел
+						// Оповещаем противника, что его соперник вышел
 						onMessage($client, array(
 							'type' => 'opponent-surrender'));
-						//сохраняем информацию о выигравшем игроке
+						// Сохраняем информацию о выигравшем игроке
 						$info[(int)$client]['opponent_id'] = null;
 						$info[(int)$client]['state'] = 'online';
 						$_user_id = $info[(int)$client]['user_id'];
 						$_user_name = $info[(int)$client]['user_name'];
 						$_user_login = $info[(int)$client]['user_login'];
-					}
-					//оповещаем всех, что тот игрок, который выиграл готов к новой игре
-					foreach ($connects as $client) {
-						if ($client != $connect && $info[(int)$client]['user_id'] != $_user_id) {
-							onMessage($client, array(
-								'type' => 'change-status',
-								'user_id' => $_user_id,
-								'user_name' => $_user_name,
-								'user_login' => $_user_login,
-								'status' => 'online'));
-						}
+						break;
 					}
 				}
+				// Оповещаем всех, что тот игрок, который выиграл готов к новой игре
+				foreach ($connects as $client) {
+					if ($client != $connect && $info[(int)$client]['user_id'] != $_user_id) {
+						onMessage($client, array(
+							'type' => 'change-status',
+							'user_id' => $_user_id,
+							'user_name' => $_user_name,
+							'user_login' => $_user_login,
+							'status' => 'online'));
+					}
+				}				
 			}
 			fclose($connect);
 			unset($connects[array_search($connect, $connects)]);
-			continue;
-		}		
-
-		try {
-			$data = (array)json_decode(decode($data)['payload']);			
-			echo "incoming message: ";
-			print_r($data);
-
-			//если нет типа у принимаемого сообщения, сообщаем об этом
-			if (!array_key_exists('type', $data)) {
-				//echo "unknown incoming message\n";
-			}
-			else {
-				//иначе выполняем действия в соответствии с типом полученного сообщения
-				switch($data['type']) {
-					case 'connect':
-						$info[(int)$connect]['state'] = 'online';
-						$info[(int)$connect]['user_id'] = $data['user_id'];
-						$info[(int)$connect]['user_name'] = $data['user_name'];
-						$info[(int)$connect]['user_login'] = $data['user_login'];
-						//отправляем всем, что подключился новый игрок
-						$msg = array(
-							'type' => 'change-status',
-							'user_id' => $data['user_id'],
-							'user_name' => $data['user_name'],
-							'user_login' => $data['user_login'],
-							'status' => 'online');
-						foreach ($connects as $client) {
-							if ($info[(int)$connect]['user_id'] != $info[(int)$client]['user_id']) {
-								onMessage($client, $msg);
-							}
-						}							
-						break;
-
-					case 'invite':
-					case 'invite-deny':
-					case 'invite-accept':
-						//пересылаем invit-ы нужному пользователю				
-						foreach ($connects as $client) {
-							if ($info[(int)$client]['user_id'] == $data['user_id']) {
-								onMessage($client, array(
-									'type' => $data['type'],
-									'user_id' => $info[(int)$connect]['user_id']));
-								break;
-							}
-						}
-						//если это принятие приглашения, то нужно зафиксировать что началась новая игра
-						if ($data['type'] == 'invite-accept') {
-							//сохраняем информацию о том, что игроки заняты
-							foreach ($connects as $client) {
-								if ($info[(int)$client]['user_id'] == $data['user_id']) {
-									$info[(int)$connect]['state'] = 'busy';
-									$info[(int)$connect]['opponent_id'] = $info[(int)$client]['user_id'];
-									$info[(int)$client]['state'] = 'busy';
-									$info[(int)$client]['opponent_id'] = $info[(int)$connect]['user_id'];
-									break;
-								}
-							}
-							//оповещаем всех что пользователи начавшие игру заняты					
-							foreach ($connects as $client) {
-								if ($connect != $client) {							
-									onMessage($client, array(
-										'type' => 'change-status',
-										'status' => 'busy',
-										'user_id' => $info[(int)$connect]['user_id']));
-								}
-								if ($info[(int)$connect]['opponent_id'] != $info[(int)$client]['user_id']) {
-									onMessage($client, array(
-										'type' => 'change-status',
-										'status' => 'busy',
-										'user_id' => $info[(int)$connect]['opponent_id']));
-								}
-							}
-						}
-						break;
-
-					case 'turn':
-					case 'message':
-						//пересылаем координаты хода или сообщение противнику				
-						foreach ($connects as $client) {
-							if ($info[(int)$connect]['user_id'] == $info[(int)$client]['opponent_id']) {
-								onMessage($client, $data);
-								break;
-							}
-						}
-						break;
-
-					case 'game-over':
-						if ($data['result'] == 'win') break;
-						if ($info[(int)$connect]['state'] == 'online') { break; }
-						//оповещаем всех что пользователи закончившие игру свободны
-						foreach ($connects as $client) {
-							if ($connect != $client) {
-								onMessage($client, array(
-									'type' => 'change-status',
-									'status' => 'online',
-									'user_id' => $info[(int)$connect]['user_id']));
-							}
-							if ($info[(int)$connect]['opponent_id'] != $info[(int)$client]['user_id']) {
-								onMessage($client, array(
-									'type' => 'change-status',
-									'status' => 'online',
-									'user_id' => $info[(int)$connect]['opponent_id']));
-							}
-						}
-						//находим информацию о противнике
-						foreach ($connects as $client) {
-							if ($info[(int)$client]['user_id'] == $info[(int)$connect]['opponent_id']) {
-								//записываем результаты игры в базу
-								$model = new Model();
-								$model->save_game_result($info[(int)$connect]['opponent_id'], $info[(int)$connect]['user_id']);
-								//если surrender, оповещаем второго игрока, что он выиграл
-								if ($data['result'] == 'surrender') {
-									onMessage($client, array(
-										'type' => 'opponent-surrender'));
-								}
-								//сохраняем информацию о том, что игроки свободны
-								$info[(int)$connect]['state'] = 'online';
-								$info[(int)$connect]['opponent_id'] = false;
-								$info[(int)$client]['state'] = 'online';
-								$info[(int)$client]['opponent_id'] = false;
-								break;
-							}
-						}
-						break;
-					
-					case 'message-all':
-						//пересылаем сообщение всем пользователям
-						$msg = array(
-							'type' => 'message-all',
-							'user_id' => $info[(int)$connect]['user_id'],
-							'user_name' => $info[(int)$connect]['user_name'],
-							'user_login' => $info[(int)$connect]['user_login'],
-							'text' => $data['text']);
-						foreach ($connects as $client) {
-							if ($client != $connect) {
-								onMessage($client, $msg);
-							}
-						}
-						//сохраняем  сообщение в буфер чата
-						unset($msg['type']);
-						$chat->add($msg);
-						break;
-					default:
-						//echo "unknown message type\n";
-						break;
-				}
-			}
-		}	
-		catch (Exception $e) {
-			echo 'exception: ',  $e->getMessage(), "\n";
 		}
 	}
 }
 fclose($socket);
 
+// Функция подготавливает и отправляет данные
 function onMessage($connect, $data) {
-	echo "Message:" . @implode(',', $data) . " \n";
+	echo "Message:" . @implode(',', $data) . " to " .(int)$connect. " \n";
 	fwrite($connect, encode(json_encode($data))); 
 }
-
  
 /**
  * Функции, необходимые для установки соединения, кодирования данных и
  * декодирования входящих данных.
  */
-
-//Функция рукопожатия
+// Функция рукопожатия
 function handshake($connect) { 
 	$info = array(); 
 	$line = fgets($connect); 
@@ -310,7 +303,6 @@ function handshake($connect) {
 
 	return $info; 
 }
-
 // Кодирование уходящих данных
 function encode($payload, $type = 'text', $masked = false) {
 	$frameHead = array(); 
@@ -382,7 +374,6 @@ function encode($payload, $type = 'text', $masked = false) {
 	
 	return $frame;
 }
-
 // Декодирование входящих данных
 function decode($data) {
 	$unmaskedPayload = ''; 
