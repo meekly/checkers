@@ -195,6 +195,7 @@ while (true) {
 
 					case 'game-over':
 						if ($data['result'] == 'win') break;
+						if ($info[(int)$connect]['state'] == 'online') { break; }
 						//оповещаем всех что пользователи закончившие игру свободны
 						foreach ($connects as $client) {
 							if ($connect != $client) {
