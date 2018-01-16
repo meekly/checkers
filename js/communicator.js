@@ -28,7 +28,7 @@ Communicator.prototype.activate = function() {
 
 Communicator.prototype.handleInvitation = function(json) {
 	var self = this;
-	ask("Принять игру от пользователя "+json.user_id+"?", function() {
+	ask("Принять игру от пользователя "+json.user_login+"?", function() {
 		Socket.acceptPlay(json.user_id);
 		self.moveToOnline("white");
 	}, function() {
@@ -60,7 +60,7 @@ Communicator.prototype.moveToOnline = function(color) {
 };
 
 Communicator.prototype.denyPlay = function(json) {
-	notice("Пользователь "+json.user_id+" отказал вам в игре");
+	notice("Пользователь "+json.user_login+" отказал вам в игре");
 };
 
 Communicator.prototype.handleOpponentSurrender = function() {
