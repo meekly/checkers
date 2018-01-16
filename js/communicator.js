@@ -36,11 +36,11 @@ Communicator.prototype.handleInvitation = function(json) {
 	});
 };
 
-Communicator.prototype.handleInviteClick = function(user) {
-	ask("Пригласить пользователя " + user.user_login + "?",
+Communicator.prototype.handleInviteClick = function(user_id, user_login) {
+	ask("Пригласить пользователя " + user_login + "?",
 		function(){
-			Socket.invite(user.user_id);
-			notice("Запрос отправлен пользователю "+user.user_login);
+			Socket.invite(user_id);
+			notice("Запрос отправлен пользователю "+user_login);
 	});
 };
 
@@ -123,13 +123,17 @@ Communicator.prototype.changeUserStatus = function(json) {
 	}
 	if (translateStatus(json["status"]) == "Готов играть") {
 		user.setAttribute("data-can-play", 1);
-		user.addEventListener("click", this.handleInviteClick.bind(this, json));
+		if (!user.hasAttribute("data-handled")) {
+			user.setAttribute("data-handled", 1);
+			var user_id = json.user_id;
+			var user_login = user.getElementsByClassName("users-list__user__login")[0].innerHTML;
+			user.addEventListener("click", this.handleInviteClick.bind(this, user_id, user_login));
+		}
 	} else if (translateStatus(json["status"]) == "Только что вышел"
 	|| translateStatus(json["status"]) == "Непонятно") {
 		user.setAttribute("data-delete", 1);
 	} else {
 		user.setAttribute("data-can-play", 0);
-		user.removeEventListener("click", this.handleInviteClick.bind(this, json));
 	}
 };
 
