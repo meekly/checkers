@@ -11,7 +11,7 @@ function Chat() {
 	
 	var toggler = document.createElement("div");
 	toggler.classList.add("toggler");
-	toggler.innerHTML = "Спрятать";
+	toggler.innerHTML = "Hide";
 	toggler.addEventListener("click", this.toggleChat.bind(this, "hide"));
 
 	var textbox = document.createElement("textarea");

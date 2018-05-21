@@ -83,7 +83,7 @@ Checkers.prototype.reinitGame = function(type, turn) {
 	if (type == "online") {
 		// Мы хоти начать новую игру. Наша очередь определяется коммуникатором.
 		this.TURN = turn;
-		console.log("Игра началась");
+		console.log("The game has begun");
 		this.socketState = "run";
 	}
 	else { this.socketState = undefined; }

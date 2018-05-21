@@ -28,7 +28,7 @@ Communicator.prototype.activate = function() {
 
 Communicator.prototype.handleInvitation = function(json) {
 	var self = this;
-	ask("Accept the game from the user "+json.user_login+"?", function() {
+	ask("Accept the game from "+json.user_login+"?", function() {
 		Socket.acceptPlay(json.user_id);
 		self.moveToOnline("white");
 	}, function() {
@@ -60,7 +60,7 @@ Communicator.prototype.moveToOnline = function(color) {
 };
 
 Communicator.prototype.denyPlay = function(json) {
-	notice("User "+json.user_login+" declined your invitation");
+	notice(json.user_login+" declined your invitation");
 };
 
 Communicator.prototype.handleOpponentSurrender = function() {
@@ -170,7 +170,7 @@ function translateStatus(status) {
 		case "offline":
 			return "Just left";
 		case "busy":
-			return "Is plaing";
+			return "Is playing";
 		default:
 			return "Unknown";
 	}
