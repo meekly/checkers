@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS checkers;
+CREATE DATABASE checkers;
 USE checkers;
 DROP TABLE IF EXISTS games;
 DROP TABLE IF EXISTS users;

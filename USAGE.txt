@@ -1,0 +1,36 @@
+Good evening, my friend!
+
+We introduce you an application Checkers. You can play it on one computer or more.
+
+Follow the instructions to make it work!
+
+1. Install XAMPP whether you are on Windows or Linux.
+2. Put the contents of this directory into the `htdocs' directory.
+   NB! (not the folder `checkers', the entire contents of `checkers')
+   It may be `C:\Xampp\htdocs' or `/opt/lampp/htdocs'.
+3. Open in your browser: localhost/phpmyadmin
+4. Click `Import', find the file `database/tables.sql' in your `htdocs' directory
+5. Press Go!
+   You must have succeed!
+6. Open your terminal in htdocs folder.
+7. Run `run_socker.bat' if you are on Windows, `./run_socket.sh' if you are on Linux.
+8. Open `localhost' in your browser
+   Open `localhost' in another browser
+9. Register two players if you want to test the ability to play together.
+10. Open game as one player on the first browser.
+11. Open game as another player on the second browser.
+12. Play!
+
+Notice that file .htaccess is very important to copy
+You should have the following contents of htdocs:
+
+htdocs/:
+	app/
+	css/
+	database/
+	img/
+	js/
+	USAGE.txt
+	index.php
+	run_socket.bat
+	run_socket.sh
