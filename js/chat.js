@@ -2,7 +2,7 @@ function Chat() {
 	Socket.register("message", this);
 	this.toggler = document.createElement("div");
 	this.toggler.classList.add("chat-toggler");
-	this.toggler.innerHTML = "Чат с соперником>";
+	this.toggler.innerHTML = "Chat with opponent>";
 	this.toggler.style.display = "none";
 	this.toggler.addEventListener("click", this.toggleChat.bind(this, "show"));
 
@@ -16,16 +16,16 @@ function Chat() {
 
 	var textbox = document.createElement("textarea");
 	textbox.classList.add("textbox");
-	textbox.setAttribute("placeholder", "Ваше сообщение противнику");
+	textbox.setAttribute("placeholder", "Your message to the opponent");
 
 	var messages = document.createElement("div");
 	messages.classList.add("messages");
 	
 	var label = document.createElement("div");
 	label.classList.add("label");
-	label.innerHTML = "Чат";
+	label.innerHTML = "Chat";
 
-	var message = messageElement('Судья', 'Ну вот и начинаем!');
+	var message = messageElement('Referee', 'Well, here we begin!');
 	this.localChat.appendChild(label);
 	messages.appendChild(message);
 	this.localChat.appendChild(messages);
@@ -36,7 +36,7 @@ function Chat() {
 	textbox.addEventListener("keyup", function(e) {
 		var key = e.keyCode;
 		if (key == 13) {
-			var message = messageElement('Я', e.target.value, true);
+			var message = messageElement('Me', e.target.value, true);
 			Socket.sendMessage(e.target.value);
 			var chatArea = self.localChat.getElementsByClassName("messages")[0];
 			chatArea.appendChild(message);
@@ -59,7 +59,7 @@ Chat.prototype.toggleChat = function(way) {
 };
 Chat.prototype.handleNewMessage = function(json, isMy) {
 	var chatArea =this.localChat.getElementsByClassName("messages")[0];
-	chatArea.appendChild(messageElement('Соперник', json.text));
+	chatArea.appendChild(messageElement('Opponent', json.text));
 	chatArea.scrollTop = chatArea.scrollHeight
 };
 

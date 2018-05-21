@@ -2,7 +2,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Шашечки</title>
+    <title>Cool Checkers</title>
     <!--LINK CSS-->
     <link href="css/style.css" rel="stylesheet">
   </head>
@@ -13,25 +13,25 @@
 				<a href="/"><img src="img/king-black.png"> Cool Checkers</a>
 
 				<div class="right-side">
-					<button id="chat-button" class="menu-button" style="display: none;">Беседочка</button>					
+					<button id="chat-button" class="menu-button" style="display: none;">Chat</button>					
 						<?php if ($_SESSION['name'] == 'guest'): ?>
               <button id="login-button" class="menu-button" onclick="location.href = '/login'">
-							Войти
+							Log in
 						<?php else: ?>
               <button id="login-button" class="menu-button" onclick="location.href = '/logout'">
-							Выйти
+							Log out
 						<?php endif ?>
 					</button>
 				</div>
 
-        <span id="single" class="selected_game">Против компьютера</span>
+        <span id="single" class="selected_game">Against computer</span>
         <?php if (!empty($_SESSION['game_type']) && $_SESSION['game_type'] == "offline"): ?>
-          <span id="multi" class="selected_game">С собой</span>
+          <span id="multi" class="selected_game">With friend</span>
         <?php else: ?>
-          <span id="multi">С собой</span>
+          <span id="multi">With friend</span>
         <?php endif ?>
 
-          <span id="online" style="display: none;" class="selected_game">Онлайн</span>
+          <span id="online" style="display: none;" class="selected_game">Online</span>
       </nav>
       
       <div id="content">

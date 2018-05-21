@@ -1,7 +1,7 @@
 function Communicator(userId,login, name) {
 	if (login === undefined || login == null
 		|| userId === undefined || userId == null) {
-		notice("Вы не вошли на сайт. Для продолжения - войдите или зарегистрируйтесь");
+		notice("You are not logged in. To continue, please login or register");
 		return;
 	}
 	// Authorized user can see others online
@@ -28,7 +28,7 @@ Communicator.prototype.activate = function() {
 
 Communicator.prototype.handleInvitation = function(json) {
 	var self = this;
-	ask("Принять игру от пользователя "+json.user_login+"?", function() {
+	ask("Accept the game from the user "+json.user_login+"?", function() {
 		Socket.acceptPlay(json.user_id);
 		self.moveToOnline("white");
 	}, function() {
@@ -37,16 +37,16 @@ Communicator.prototype.handleInvitation = function(json) {
 };
 
 Communicator.prototype.handleInviteClick = function(user_id, user_login) {
-	ask("Пригласить пользователя " + user_login + "?",
+	ask("Invite " + user_login + " to the game?",
 		function(){
 			Socket.invite(user_id);
-			notice("Запрос отправлен пользователю "+user_login);
+			notice("Invite sent to "+user_login);
 	});
 };
 
 Communicator.prototype.acceptPlay = function(json) {
 	// Accept the play (Socket send)
-	notice("Пользователь "+json.user_id+" принял ваш запрос");
+	notice(json.user_id+" accepted your invitation");
 	this.moveToOnline("black");
 };
 Communicator.prototype.moveToOnline = function(color) {
@@ -54,17 +54,17 @@ Communicator.prototype.moveToOnline = function(color) {
 	["single", "multi"].forEach(function(item){
 		document.getElementById(item).className = "";
 	})
-	notice("Если вы решите сдаться, просто обновите страницу или выберите другой режим игры");
+	notice("If you decide to give up, just refresh the page or choose a different game mode");
 	document.getElementById("online").style['display'] = 'block';
 	chat = new Chat();
 };
 
 Communicator.prototype.denyPlay = function(json) {
-	notice("Пользователь "+json.user_login+" отказал вам в игре");
+	notice("User "+json.user_login+" declined your invitation");
 };
 
 Communicator.prototype.handleOpponentSurrender = function() {
-	notice("Противник сдался");
+	notice("Your opponent gave up");
 	Game.opponentSurrender(); // Opponent surrendered so we win
 };
 
@@ -121,7 +121,7 @@ Communicator.prototype.changeUserStatus = function(json) {
 	if (user.hasAttribute("data-delete")) {
 		user.removeAttribute("data-delete");
 	}
-	if (translateStatus(json["status"]) == "Готов играть") {
+	if (translateStatus(json["status"]) == "Ready to play") {
 		user.setAttribute("data-can-play", 1);
 		if (!user.hasAttribute("data-handled")) {
 			user.setAttribute("data-handled", 1);
@@ -129,8 +129,8 @@ Communicator.prototype.changeUserStatus = function(json) {
 			var user_login = user.getElementsByClassName("users-list__user__login")[0].innerHTML;
 			user.addEventListener("click", this.handleInviteClick.bind(this, user_id, user_login));
 		}
-	} else if (translateStatus(json["status"]) == "Только что вышел"
-	|| translateStatus(json["status"]) == "Непонятно") {
+	} else if (translateStatus(json["status"]) == "Just left"
+	|| translateStatus(json["status"]) == "Unknown") {
 		user.setAttribute("data-delete", 1);
 	} else {
 		user.setAttribute("data-can-play", 0);
@@ -166,12 +166,12 @@ Communicator.prototype.dispatch = function(message) {
 function translateStatus(status) {
 	switch(status) {
 		case "online":
-			return "Готов играть";
+			return "Ready to play";
 		case "offline":
-			return "Только что вышел";
+			return "Just left";
 		case "busy":
-			return "В бою";
+			return "Is plaing";
 		default:
-			return "Непонятно";
+			return "Unknown";
 	}
 }

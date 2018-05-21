@@ -20,7 +20,7 @@ if (isset($_SESSION['user_name'], $_SESSION['user_id'], $_SESSION['user_login'])
 <div class="chat-area">
 </div>
 <div class="textbox">
-	<textarea placeholder="Ваше сообщение всем"></textarea>
+	<textarea placeholder="Your message to all"></textarea>
 </div>
 </div>
 
@@ -28,7 +28,7 @@ if (isset($_SESSION['user_name'], $_SESSION['user_id'], $_SESSION['user_login'])
 <!-- Users online -->
 <div id="users-list">
   <div class="users-list__label">
-		Пользователи онлайн
+		Members online
   </div>
 </div>
-<div style="display: none;" class="users-list__toggler">В сети&gt;</div>
+<div style="display: none;" class="users-list__toggler">Online&gt;</div>

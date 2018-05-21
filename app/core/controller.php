@@ -36,7 +36,7 @@ class Controller {
         $_SESSION['user_login'] = $_POST['login'];        
 				header('Location: /mypage');
       }
-      else $this->view->login_view("Неверный логин или пароль");
+      else $this->view->login_view("Invalid login or password");
     }
     else $this->view->login_view();
   }
@@ -49,10 +49,10 @@ class Controller {
       // Если не нашли пользователя с таким именем, то регестрируем
       if (!$this->model->is_user($_POST['login'])) {
 	      $this->model->signup();
-	      $this->view->msg_view("Вы успешно зарегестрированы");				
+	      $this->view->msg_view("You have been successfully registered");				
       }
       else {
-	      $this->view->signup_view("Имя пользователя уже занято!");
+	      $this->view->signup_view("Username is already taken!");
       }			
     }
     else $this->view->signup_view();

@@ -36,7 +36,7 @@ function ask(message, yesCallback, noCallback) {
 
 	var yesBtn = document.createElement("button");
 	yesBtn.classList.add("yes-btn");
-	yesBtn.innerHTML = "Да";
+	yesBtn.innerHTML = "Yes";
 	yesBtn.addEventListener("click", function() {
 		document.body.removeChild(confirmation);
 		yesCallback();
@@ -44,7 +44,7 @@ function ask(message, yesCallback, noCallback) {
 
 	var noBtn = document.createElement("button");
 	noBtn.classList.add("no-btn");
-	noBtn.innerHTML = "Нет";
+	noBtn.innerHTML = "No";
 	noBtn.addEventListener("click", function() {
 		document.body.removeChild(confirmation);
 		noCallback();
